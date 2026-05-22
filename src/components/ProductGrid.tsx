@@ -58,13 +58,13 @@ function ProductCard({
     touchStartYRef.current = touch.clientY;
     touchStartXRef.current = touch.clientX;
 
-    // Delay the touch activation slightly to distinguish intentional holds from scroll swipes
+    // Delay the touch activation slightly (100ms) to filter out scroll swipes without feeling sluggish
     touchStartTimeoutRef.current = window.setTimeout(() => {
       if (!hasMovedRef.current) {
         setActiveTouchedCardId(product.id);
       }
       touchStartTimeoutRef.current = null;
-    }, 200);
+    }, 100);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -101,7 +101,7 @@ function ProductCard({
       if (touchTimeoutRef.current !== null) {
         window.clearTimeout(touchTimeoutRef.current);
       }
-      // Delay deactivation so the BUY NOW click can process and then fade out elegantly
+      // Delay deactivation briefly (250ms) so the BUY NOW click can process, then fades out immediately
       touchTimeoutRef.current = window.setTimeout(() => {
         setActiveTouchedCardId((currentId) => {
           if (currentId === product.id) {
@@ -110,7 +110,7 @@ function ProductCard({
           return currentId;
         });
         touchTimeoutRef.current = null;
-      }, 1500); // 1.5 seconds allows comfortable time to click and then fades away
+      }, 250);
     }
   };
 
@@ -135,7 +135,7 @@ function ProductCard({
           return currentId;
         });
         touchTimeoutRef.current = null;
-      }, 1500);
+      }, 250);
     }
   };
 
