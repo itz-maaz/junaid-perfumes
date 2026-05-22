@@ -232,7 +232,7 @@ function ProductPage() {
               {product.highlights.map((hl) => (
                 <span
                   key={hl}
-                  className="inline-flex items-center gap-1 rounded-full bg-zinc-900/80 border border-white/5 px-3 py-1 text-[10px] text-zinc-300 font-medium shadow-sm"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-brand-green/10 border border-brand-green/20 px-3.5 py-1 text-[10px] text-brand-green font-medium tracking-wide shadow-sm"
                 >
                   <div className="h-1.5 w-1.5 rounded-full bg-brand-green" />
                   {hl}

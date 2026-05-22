@@ -178,14 +178,14 @@ function ProductCard({
                 : "opacity-100 translate-y-0 pointer-events-auto"
             }`}
           >
-            <div className="flex flex-nowrap gap-1 overflow-hidden">
+            <div className="flex flex-wrap gap-x-2 gap-y-0.5 items-center overflow-hidden">
               {product.highlights.slice(0, 2).map((h, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center text-[8px] sm:text-[9px] font-medium uppercase tracking-wider text-zinc-400 bg-white/5 border border-white/10 rounded px-1.5 py-0.5 whitespace-nowrap"
-                >
-                  {h}
-                </span>
+                <React.Fragment key={i}>
+                  {i > 0 && <span className="text-zinc-700 text-[8px] sm:text-[9px]">·</span>}
+                  <span className="text-[9px] sm:text-[10px] font-normal tracking-wide text-rose-200/70 whitespace-nowrap">
+                    {h}
+                  </span>
+                </React.Fragment>
               ))}
             </div>
           </div>
