@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import heroPerfume from "@/assets/hero-perfume.jpg";
-import perfumeOcean from "@/assets/perfume-ocean.jpg";
-import perfumeVelvetOud from "@/assets/perfume-velvet-oud.jpg";
 import slide2 from "@/assets/hero-slide-2.jpg";
-import slide3 from "@/assets/hero-slide-3.jpg";
-import slide4 from "@/assets/hero-slide-4.jpg";
-import perfume1 from "@/assets/perfume1.jpg";
-import perfume3 from "@/assets/perfume3.jpg";
 import perfume4 from "@/assets/perfume4.jpg";
+import oceanBreeze3 from "@/assets/ocean_breeze_3_1779388153359.png";
+import saffronRouge3 from "@/assets/saffron_rouge_3.png";
+import royalOud3 from "@/assets/royal_oud_3_1779387777372.png";
+import amberNoir3 from "@/assets/amber_noir_3_1779388090357.png";
+import midnightMusk3 from "@/assets/midnight_musk_3_1779387959375.png";
 
 const slides = [
   { src: slide2, alt: "Crystal perfume bottle with jasmine on black marble" },
@@ -15,17 +13,16 @@ const slides = [
     src: perfume4,
     alt: "Luxury Chanel-style perfume bottle submerged in crystal clear water with beautiful splashes",
   },
-  { src: perfumeOcean, alt: "Fresh ocean breeze luxury perfume bottle" },
-  { src: heroPerfume, alt: "Luxury amber perfume bottle on silk with golden mist" },
-  { src: perfume1, alt: "High-end amber perfume bottle with smoking mist and elegant candles" },
-  { src: slide3, alt: "Amber perfume with peony on black silk" },
-  { src: perfume3, alt: "Minimalist luxury perfume bottle on a sleek black marble pedestal" },
-  { src: perfumeVelvetOud, alt: "Velvet oud perfume bottle in deep shadows" },
-  { src: slide4, alt: "Golden perfume bottle with swirling mist and orchids" },
+  { src: oceanBreeze3, alt: "Fresh ocean breeze luxury perfume bottle" },
+  { src: saffronRouge3, alt: "Crimson Saffron and velvety Red Rose luxury perfume bottle" },
+  { src: royalOud3, alt: "Opulent and majestic Royal Oud luxury perfume bottle" },
+  { src: amberNoir3, alt: "Warm amber and exotic resins luxury perfume bottle" },
+  { src: midnightMusk3, alt: "Seductive midnight musk luxury perfume bottle" },
 ];
 
 export function Hero() {
   const [index, setIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(-1);
 
   useEffect(() => {
     // Preload all slides so the first transition isn't delayed by network
@@ -34,13 +31,15 @@ export function Hero() {
       img.src = s.src;
     });
 
-    const first = setTimeout(() => {
-      setIndex((i) => (i + 1) % slides.length);
-    }, 2000);
+    const nextSlide = () => {
+      setIndex((i) => {
+        setPrevIndex(i);
+        return (i + 1) % slides.length;
+      });
+    };
 
-    const id = setInterval(() => {
-      setIndex((i) => (i + 1) % slides.length);
-    }, 2000);
+    const first = setTimeout(nextSlide, 2000);
+    const id = setInterval(nextSlide, 2000);
 
     return () => {
       clearTimeout(first);
@@ -100,7 +99,11 @@ export function Hero() {
               transition: "opacity 1500ms ease-in-out",
             }}
             className={`absolute inset-0 h-full w-full object-cover object-center ${
-              i === index ? "opacity-100 z-10" : "opacity-0 z-0"
+              i === index
+                ? "opacity-100 z-10"
+                : i === prevIndex
+                ? "opacity-0 z-5"
+                : "opacity-0 z-0"
             }`}
           />
         ))}
