@@ -71,7 +71,7 @@ export function Hero() {
       <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-950/5 rounded-full blur-[150px] pointer-events-none z-0" />
 
       {/* LEFT COLUMN: Text & Branding */}
-      <div className="relative w-full flex-1 px-6 py-8 z-10 flex flex-col items-center justify-center text-center bg-[#070708] border-none md:border-t-0 md:relative md:top-0 md:left-0 md:translate-x-0 md:max-w-none md:w-1/2 md:items-start md:text-left md:pl-12 md:pr-6 md:py-24 md:backdrop-blur-none md:bg-slate-texture md:rounded-none md:min-h-0 md:max-w-none md:mx-0 md:flex-none">
+      <div className="relative w-full flex-1 -mt-18 md:mt-0 px-6 pt-1 pb-8 z-10 flex flex-col items-center justify-center text-center bg-[#070708] border-none md:border-t-0 md:relative md:top-0 md:left-0 md:translate-x-0 md:max-w-none md:w-1/2 md:items-start md:text-left md:pl-12 md:pr-6 md:py-24 md:backdrop-blur-none md:bg-slate-texture md:rounded-none md:min-h-0 md:max-w-none md:mx-0 md:flex-none">
         {/* Luxury grid texture overlay faded on all screens */}
         <div className="absolute inset-0 bg-india-grid pointer-events-none opacity-[0.06] z-0" />
 
@@ -84,7 +84,7 @@ export function Hero() {
         <p className="relative z-10 text-[10px] sm:text-xs uppercase tracking-[0.35em] text-brand-green font-semibold">
           Junaid Perfumes · Est. 2026
         </p>
-        <h1 className="relative z-10 mt-4 font-serif text-3xl sm:text-4xl md:text-5xl leading-[1.15] text-white break-words font-medium">
+        <h1 className="relative z-10 mt-3 md:mt-4 font-serif text-3xl sm:text-4xl md:text-5xl leading-[1.15] text-white break-words font-medium">
           Find Your{" "}
           <em className="font-serif italic font-normal text-rose-200/95">
             Signature
@@ -92,7 +92,7 @@ export function Hero() {
           Scent
         </h1>
 
-        <p className="relative z-10 mt-5 text-xs sm:text-sm md:text-base tracking-wide leading-relaxed max-w-lg mx-auto md:mx-0 text-zinc-400">
+        <p className="relative z-10 mt-4 md:mt-5 text-xs sm:text-sm md:text-base tracking-wide leading-relaxed max-w-lg mx-auto md:mx-0 text-zinc-400">
           Hand-crafted luxury perfumes, delivered to your door across India in 3–5 days. Secure
           checkout powered by Razorpay.
         </p>
