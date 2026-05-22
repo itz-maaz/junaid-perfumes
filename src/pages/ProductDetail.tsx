@@ -1,16 +1,16 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { 
-  ChevronLeft, 
+import {
+  ChevronLeft,
   ShoppingBag,
   ShoppingCart,
-  Sparkles, 
-  Flame, 
+  Sparkles,
+  Flame,
   ShieldCheck,
-  Info, 
+  Info,
   Heart,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -30,13 +30,18 @@ export function ProductDetail() {
 function ProductPage() {
   const { id } = useParams();
   const { addItem, buyNow } = useCart();
-  
+
   const product = products.find((p) => p.id === id);
-  
+
   // Default sizes and selected states
   const [selectedSize, setSelectedSize] = useState("50ml");
   const [activeAccordion, setActiveAccordion] = useState<string | null>("pyramid");
   const [isAdded, setIsAdded] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  useEffect(() => {
+    setActiveImageIndex(0);
+  }, [id]);
 
   useEffect(() => {
     if (!product || typeof window === "undefined" || window.location.hash !== "#buy-now") return;
@@ -76,7 +81,9 @@ function ProductPage() {
 
   // Calculate prices based on size
   const is100ml = selectedSize === "100ml";
-  const currentPrice = is100ml ? `₹ ${product.priceValue100ml.toLocaleString("en-IN")}` : product.price;
+  const currentPrice = is100ml
+    ? `₹ ${product.priceValue100ml.toLocaleString("en-IN")}`
+    : product.price;
 
   const cartItemForSize = (size: string) => {
     const is100 = size === "100ml";
@@ -106,7 +113,6 @@ function ProductPage() {
 
   return (
     <div className="min-h-screen w-full bg-black text-white flex flex-col overflow-x-hidden relative">
-      
       {/* Background Ambient Luxury Light */}
       <div className="absolute top-[20%] left-1/4 w-[400px] h-[400px] bg-emerald-950/5 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="absolute bottom-[30%] right-1/4 w-[400px] h-[400px] bg-amber-950/5 rounded-full blur-[120px] pointer-events-none z-0" />
@@ -114,7 +120,6 @@ function ProductPage() {
       <Navbar />
 
       <main className="flex-1 w-full max-w-6xl mx-auto px-6 py-8 md:py-16 z-10">
-        
         {/* Back Link */}
         <Link
           to="/"
@@ -126,11 +131,9 @@ function ProductPage() {
 
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
-          
-          {/* LEFT COLUMN: Zoomable Premium Image Container */}
-          <div className="md:col-span-6 flex justify-center">
+          {/* LEFT COLUMN: Zoomable Premium Image Container & Gallery Slides */}
+          <div className="md:col-span-6 flex flex-col items-center">
             <div className="relative w-full aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-md shadow-2xl shadow-black/80 group">
-              
               {/* Product Badge */}
               <span className="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-zinc-300 border border-white/10">
                 <Sparkles className="h-3 w-3 text-brand-green" />
@@ -138,19 +141,50 @@ function ProductPage() {
               </span>
 
               <img
-                src={product.image}
-                alt={product.name}
-                className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 group-hover:brightness-[1.03]"
+                src={
+                  product.images && product.images[activeImageIndex]
+                    ? product.images[activeImageIndex]
+                    : product.image
+                }
+                alt={`${product.name} - View ${activeImageIndex + 1}`}
+                className="h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-[1.03]"
               />
-              
+
               {/* Elegant shadow gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-70 pointer-events-none" />
             </div>
+
+            {/* Premium Slide Navigation / Thumbnails */}
+            {product.images && product.images.length > 1 && (
+              <div className="flex justify-center gap-3 mt-4 w-full">
+                {product.images.map((imgUrl, idx) => {
+                  const isSelected = activeImageIndex === idx;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`relative w-16 h-20 sm:w-20 sm:h-24 rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer ${
+                        isSelected
+                          ? "border-brand-green ring-2 ring-brand-green/20 scale-105"
+                          : "border-white/10 opacity-60 hover:opacity-100 hover:border-white/30"
+                      }`}
+                      aria-label={`View perfume image ${idx + 1}`}
+                    >
+                      <img
+                        src={imgUrl}
+                        alt={`${product.name} slide ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* RIGHT COLUMN: Product Information & Interactive Controls */}
           <div className="md:col-span-6 flex flex-col justify-center">
-            
             {/* Brand Title */}
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.45em] text-brand-green leading-none">
               JUNAID PERFUMES
@@ -235,7 +269,10 @@ function ProductPage() {
                 className="group w-full rounded-full bg-brand-green py-2.5 sm:py-3 text-base sm:text-lg font-sans font-semibold tracking-normal text-black shadow-lg shadow-brand-green/25 transition-transform hover:bg-brand-green/90 active:scale-[0.98] cursor-pointer"
               >
                 <span className="inline-flex items-center justify-center gap-2.5">
-                  <ShoppingCart className="h-5 w-5 shrink-0 text-black transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5" strokeWidth={2.5} />
+                  <ShoppingCart
+                    className="h-5 w-5 shrink-0 text-black transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5"
+                    strokeWidth={2.5}
+                  />
                   Buy Now
                 </span>
               </button>
@@ -245,7 +282,10 @@ function ProductPage() {
                 className="group relative overflow-hidden w-full rounded-full bg-blue-400 py-2.5 sm:py-3 text-base sm:text-lg font-serif font-medium tracking-normal text-black shadow-md shadow-blue-400/30 transition-transform hover:bg-blue-500 active:scale-[0.98] cursor-pointer"
               >
                 <span className="inline-flex items-center justify-center gap-2.5">
-                  <ShoppingBag className="h-5 w-5 shrink-0 text-black transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5" strokeWidth={2.5} />
+                  <ShoppingBag
+                    className="h-5 w-5 shrink-0 text-black transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5"
+                    strokeWidth={2.5}
+                  />
                   {isAdded ? "Added to Cart" : "Add to Cart"}
                 </span>
               </button>
@@ -253,7 +293,6 @@ function ProductPage() {
 
             {/* Scent Journey & Ingredients Custom Accordions */}
             <div className="mt-10 border-t border-zinc-900">
-              
               {/* Accordion 1: Scent Journey */}
               <div className="border-b border-zinc-900">
                 <button
@@ -344,24 +383,24 @@ function ProductPage() {
                 >
                   <div className="pt-1 space-y-4">
                     <p className="text-xs text-zinc-400 leading-relaxed font-light">
-                      <strong className="text-zinc-300 font-medium">Care Instructions:</strong> Store your luxury perfume in a cool, dry place away from direct sunlight and extreme temperatures to maintain its intense oil potency and elegant aroma profile over the years.
+                      <strong className="text-zinc-300 font-medium">Care Instructions:</strong>{" "}
+                      Store your luxury perfume in a cool, dry place away from direct sunlight and
+                      extreme temperatures to maintain its intense oil potency and elegant aroma
+                      profile over the years.
                     </p>
                     <div className="flex items-start gap-2.5 p-3 rounded-xl border border-white/5 bg-zinc-900/20">
                       <ShieldCheck className="h-4 w-4 text-brand-green mt-0.5 shrink-0" />
                       <p className="text-[10.5px] text-zinc-400 leading-normal font-light">
-                        <strong className="text-zinc-300 font-medium">Full Ingredients:</strong> {product.ingredients}
+                        <strong className="text-zinc-300 font-medium">Full Ingredients:</strong>{" "}
+                        {product.ingredients}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </main>
 
       <Footer />
