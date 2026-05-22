@@ -41,6 +41,15 @@ function ProductPage() {
 
   useEffect(() => {
     setActiveImageIndex(0);
+    if (typeof window !== "undefined") {
+      if (window.innerWidth >= 768) {
+        // Laptop view: scroll a little down so buy now & cart button are clearly visible
+        window.scrollTo(0, 150);
+      } else {
+        // Mobile view: scroll to the top so they can see the gallery images
+        window.scrollTo(0, 0);
+      }
+    }
   }, [id]);
 
   useEffect(() => {

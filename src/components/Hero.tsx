@@ -66,14 +66,14 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="w-full min-h-[88vh] md:min-h-[80vh] md:h-[85vh] relative overflow-hidden bg-black flex flex-col md:flex-row">
+    <section className="w-full relative overflow-hidden bg-[#070708] md:bg-black flex flex-col-reverse md:flex-row h-[88vh] md:min-h-[80vh] md:h-[85vh]">
       {/* Massive subtle ambient glow in the middle behind everything */}
       <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-950/5 rounded-full blur-[150px] pointer-events-none z-0" />
 
       {/* LEFT COLUMN: Text & Branding */}
-      <div className="absolute top-[35%] left-1/2 -translate-x-1/2 w-[90%] max-w-sm px-4 py-6 rounded-xl mx-auto backdrop-blur-[1px] bg-black/10 z-10 flex flex-col items-center text-center md:relative md:top-0 md:left-0 md:translate-x-0 md:max-w-none md:w-1/2 md:items-start md:text-left md:pl-12 md:pr-6 md:py-24 md:backdrop-blur-none md:bg-slate-texture md:rounded-none md:min-h-0 md:max-w-none md:mx-0">
-        {/* Luxury grid texture overlay on desktop */}
-        <div className="hidden md:block absolute inset-0 bg-india-grid pointer-events-none opacity-40 z-0" />
+      <div className="relative w-full flex-1 px-6 py-8 z-10 flex flex-col items-center justify-center text-center bg-[#070708] border-none md:border-t-0 md:relative md:top-0 md:left-0 md:translate-x-0 md:max-w-none md:w-1/2 md:items-start md:text-left md:pl-12 md:pr-6 md:py-24 md:backdrop-blur-none md:bg-slate-texture md:rounded-none md:min-h-0 md:max-w-none md:mx-0 md:flex-none">
+        {/* Luxury grid texture overlay on desktop and mobile */}
+        <div className="absolute inset-0 bg-india-grid pointer-events-none opacity-40 z-0" />
 
         {/* Soft edge blend to dissolve the boundary in the center */}
         <div className="hidden md:block absolute inset-y-0 right-0 w-1/4 bg-gradient-to-r from-transparent to-black z-0 pointer-events-none" />
@@ -81,18 +81,18 @@ export function Hero() {
         {/* Luxury Ambient Glow behind text */}
         <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-950/10 rounded-full blur-[120px] pointer-events-none z-0" />
 
-        <p className="relative z-10 text-[10px] sm:text-xs uppercase tracking-[0.35em] text-zinc-100 font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] md:drop-shadow-none md:text-brand-green">
+        <p className="relative z-10 text-[10px] sm:text-xs uppercase tracking-[0.35em] text-brand-green font-semibold">
           Junaid Perfumes · Est. 2026
         </p>
-        <h1 className="relative z-10 mt-4 font-serif text-3xl sm:text-4xl md:text-5xl leading-[1.15] text-white break-words font-medium drop-shadow-[0_4px_8px_rgba(0,0,0,0.95)] md:drop-shadow-none">
+        <h1 className="relative z-10 mt-4 font-serif text-3xl sm:text-4xl md:text-5xl leading-[1.15] text-white break-words font-medium">
           Find Your{" "}
-          <em className="font-serif italic font-normal text-rose-100/95 md:text-rose-200/95">
+          <em className="font-serif italic font-normal text-rose-200/95">
             Signature
           </em>{" "}
           Scent
         </h1>
 
-        <p className="relative z-10 mt-5 text-xs sm:text-sm md:text-base tracking-wide leading-relaxed max-w-lg mx-auto md:mx-0 text-neutral-50 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] md:text-zinc-400">
+        <p className="relative z-10 mt-5 text-xs sm:text-sm md:text-base tracking-wide leading-relaxed max-w-lg mx-auto md:mx-0 text-zinc-400">
           Hand-crafted luxury perfumes, delivered to your door across India in 3–5 days. Secure
           checkout powered by Razorpay.
         </p>
@@ -105,7 +105,7 @@ export function Hero() {
       </div>
 
       {/* RIGHT COLUMN: Full-Image Slideshow */}
-      <div className="absolute inset-0 w-full z-0 bg-black md:left-1/2 md:w-1/2 h-full min-h-full md:h-full md:min-h-full">
+      <div className="relative w-full h-[38vh] xs:h-[42vh] z-0 bg-[#070708] md:absolute md:inset-0 md:left-1/2 md:w-1/2 md:h-full md:min-h-full md:max-h-none md:min-h-0">
         {slides.map((slide, i) => (
           <img
             key={slide.src}
@@ -127,8 +127,8 @@ export function Hero() {
         {/* Desktop-only horizontal gradient overlay to melt the image edge seamlessly */}
         <div className="hidden md:block absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black to-transparent z-20 pointer-events-none" />
 
-        {/* Mobile-only gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/90 z-[5] md:hidden" />
+        {/* Mobile-only gradient overlay to melt the image bottom into the text column background (#070708) */}
+        <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#070708] to-transparent z-[15] md:hidden pointer-events-none" />
       </div>
     </section>
   );
