@@ -1,0 +1,113 @@
+import { useEffect, useState } from "react";
+import heroPerfume from "@/assets/hero-perfume.jpg";
+import perfumeOcean from "@/assets/perfume-ocean.jpg";
+import perfumeVelvetOud from "@/assets/perfume-velvet-oud.jpg";
+import slide2 from "@/assets/hero-slide-2.jpg";
+import slide3 from "@/assets/hero-slide-3.jpg";
+import slide4 from "@/assets/hero-slide-4.jpg";
+import perfume1 from "@/assets/perfume1.jpg";
+import perfume3 from "@/assets/perfume3.jpg";
+import perfume4 from "@/assets/perfume4.jpg";
+
+const slides = [
+  { src: slide2, alt: "Crystal perfume bottle with jasmine on black marble" },
+  { src: perfume4, alt: "Luxury Chanel-style perfume bottle submerged in crystal clear water with beautiful splashes" },
+  { src: perfumeOcean, alt: "Fresh ocean breeze luxury perfume bottle" },
+  { src: heroPerfume, alt: "Luxury amber perfume bottle on silk with golden mist" },
+  { src: perfume1, alt: "High-end amber perfume bottle with smoking mist and elegant candles" },
+  { src: slide3, alt: "Amber perfume with peony on black silk" },
+  { src: perfume3, alt: "Minimalist luxury perfume bottle on a sleek black marble pedestal" },
+  { src: perfumeVelvetOud, alt: "Velvet oud perfume bottle in deep shadows" },
+  { src: slide4, alt: "Golden perfume bottle with swirling mist and orchids" },
+];
+
+
+export function Hero() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    // Preload all slides so the first transition isn't delayed by network
+    slides.forEach((s) => {
+      const img = new Image();
+      img.src = s.src;
+    });
+
+    const first = setTimeout(() => {
+      setIndex((i) => (i + 1) % slides.length);
+    }, 1500);
+
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % slides.length);
+    }, 4500);
+
+    return () => {
+      clearTimeout(first);
+      clearInterval(id);
+    };
+  }, []);
+
+  return (
+    <section className="w-full min-h-[88vh] md:min-h-[80vh] md:h-[85vh] relative overflow-hidden bg-black flex flex-col md:flex-row">
+      
+      {/* Massive subtle ambient glow in the middle behind everything */}
+      <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-950/5 rounded-full blur-[150px] pointer-events-none z-0" />
+
+      {/* LEFT COLUMN: Text & Branding */}
+      <div className="absolute top-[35%] left-1/2 -translate-x-1/2 w-[90%] max-w-sm px-4 py-6 rounded-xl mx-auto backdrop-blur-[1px] bg-black/10 z-10 flex flex-col items-center text-center md:relative md:top-0 md:left-0 md:translate-x-0 md:max-w-none md:w-1/2 md:items-start md:text-left md:pl-12 md:pr-6 md:py-24 md:backdrop-blur-none md:bg-slate-texture md:rounded-none md:min-h-0 md:max-w-none md:mx-0">
+        
+        {/* Luxury grid texture overlay on desktop */}
+        <div className="hidden md:block absolute inset-0 bg-india-grid pointer-events-none opacity-40 z-0" />
+        
+        {/* Soft edge blend to dissolve the boundary in the center */}
+        <div className="hidden md:block absolute inset-y-0 right-0 w-1/4 bg-gradient-to-r from-transparent to-black z-0 pointer-events-none" />
+
+        {/* Luxury Ambient Glow behind text */}
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-950/10 rounded-full blur-[120px] pointer-events-none z-0" />
+
+        <p className="relative z-10 text-[10px] sm:text-xs uppercase tracking-[0.35em] text-zinc-100 font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] md:drop-shadow-none md:text-brand-green">
+          Junaid Perfumes · Est. 2026
+        </p>
+        <h1 className="relative z-10 mt-4 font-serif text-3xl sm:text-4xl md:text-5xl leading-[1.15] text-white break-words font-medium drop-shadow-[0_4px_8px_rgba(0,0,0,0.95)] md:drop-shadow-none">
+          Find Your <em className="font-serif italic font-normal text-rose-100/95 md:text-rose-200/95">Signature</em>{" "}
+          Scent
+        </h1>
+
+        <p className="relative z-10 mt-5 text-xs sm:text-sm md:text-base tracking-wide leading-relaxed max-w-lg mx-auto md:mx-0 text-neutral-50 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] md:text-zinc-400">
+          Hand-crafted luxury perfumes, delivered to your door across India in 3–5 days. Secure
+          checkout powered by Razorpay.
+        </p>
+        <a
+          href="#collection"
+          className="relative z-10 mt-8 inline-flex items-center justify-center rounded-full bg-brand-green px-8 py-3.5 text-xs sm:text-sm font-semibold uppercase tracking-widest text-brand-green-foreground shadow-lg shadow-brand-green/30 transition-all duration-300 hover:scale-105 active:scale-95 hover:bg-brand-green/90"
+        >
+          Shop Collection
+        </a>
+      </div>
+
+      {/* RIGHT COLUMN: Full-Image Slideshow */}
+      <div className="absolute inset-0 w-full z-0 bg-black md:left-1/2 md:w-1/2 h-full min-h-full md:h-full md:min-h-full">
+        {slides.map((slide, i) => (
+          <img
+            key={slide.src}
+            src={slide.src}
+            alt={slide.alt}
+            width={1080}
+            height={1920}
+            style={{
+              transition: "opacity 1200ms ease-in-out",
+            }}
+            className={`absolute inset-0 h-full w-full object-cover object-center ${
+              i === index ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+          />
+        ))}
+        {/* Desktop-only horizontal gradient overlay to melt the image edge seamlessly */}
+        <div className="hidden md:block absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black to-transparent z-20 pointer-events-none" />
+        
+        {/* Mobile-only gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/80 z-[5] md:hidden" />
+      </div>
+
+    </section>
+  );
+}
