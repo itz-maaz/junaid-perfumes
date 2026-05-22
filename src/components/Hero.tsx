@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import slide2 from "@/assets/hero-slide-2.jpg";
 import perfume4 from "@/assets/perfume4.jpg";
 import oceanBreeze3 from "@/assets/ocean_breeze_3_1779388153359.png";
-import saffronRouge3 from "@/assets/saffron_rouge_3.png";
+import saffronRouge1 from "@/assets/saffron_rouge_1.png";
 import royalOud3 from "@/assets/royal_oud_3_1779387777372.png";
 import amberNoir3 from "@/assets/amber_noir_3_1779388090357.png";
 import midnightMusk3 from "@/assets/midnight_musk_3_1779387959375.png";
@@ -23,11 +23,11 @@ const slides = [
     alt: "Luxury Chanel-style perfume bottle submerged in crystal clear water with beautiful splashes",
   },
   { src: oceanBreeze3, alt: "Fresh ocean breeze luxury perfume bottle" },
-  { src: saffronRouge3, alt: "Crimson Saffron and velvety Red Rose luxury perfume bottle" },
+  { src: saffronRouge1, alt: "Crimson Saffron and velvety Red Rose luxury perfume bottle" },
   { src: royalOud3, alt: "Opulent and majestic Royal Oud luxury perfume bottle" },
   { src: amberNoir3, alt: "Warm amber and exotic resins luxury perfume bottle" },
   { src: midnightMusk3, alt: "Seductive midnight musk luxury perfume bottle" },
-  
+
   // Original slides added back
   { src: perfumeOcean, alt: "Fresh ocean breeze luxury perfume bottle" },
   { src: heroPerfume, alt: "Luxury amber perfume bottle on silk with golden mist" },
@@ -117,11 +117,7 @@ export function Hero() {
               transition: "opacity 1500ms ease-in-out",
             }}
             className={`absolute inset-0 h-full w-full object-cover object-center brightness-[0.6] contrast-[1.05] saturate-[0.9] ${
-              i === index
-                ? "opacity-100 z-10"
-                : i === prevIndex
-                ? "opacity-0 z-5"
-                : "opacity-0 z-0"
+              i === index ? "opacity-100 z-10" : i === prevIndex ? "opacity-0 z-5" : "opacity-0 z-0"
             }`}
           />
         ))}
