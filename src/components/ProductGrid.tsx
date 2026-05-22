@@ -126,7 +126,6 @@ function ProductCard({
 
 export function ProductGrid() {
   const [activeCardId, setActiveCardId] = React.useState<string | null>(null);
-  const gridRef = React.useRef<HTMLDivElement>(null);
   const deactivationTimeoutRef = React.useRef<number | null>(null);
 
   const clearDeactivationTimeout = () => {
@@ -144,7 +143,7 @@ export function ProductGrid() {
       if (e.touches.length === 0) return;
       const touch = e.touches[0];
       
-      // Determine what element is directly under the finger coordinates
+      // Determine what element is directly under the finger coordinates anywhere on the page
       const element = document.elementFromPoint(touch.clientX, touch.clientY);
       if (!element) {
         setActiveCardId(null);
@@ -161,6 +160,7 @@ export function ProductGrid() {
         }
       }
       
+      // If the finger slides off a product card wrapper, deactivate immediately
       setActiveCardId(null);
     };
 
@@ -172,22 +172,26 @@ export function ProductGrid() {
       }, 200);
     };
 
-    const gridEl = gridRef.current;
-    if (gridEl) {
-      gridEl.addEventListener("touchstart", handleTouch, { passive: true });
-      gridEl.addEventListener("touchmove", handleTouch, { passive: true });
-      gridEl.addEventListener("touchend", handleTouchEnd, { passive: true });
-      gridEl.addEventListener("touchcancel", handleTouchEnd, { passive: true });
-    }
+    const handleScroll = () => {
+      // Instantly clear any hover state when scrolling to keep navigation clean
+      clearDeactivationTimeout();
+      setActiveCardId(null);
+    };
+
+    // Attach listeners globally to window so dragging off-grid, scrolling, or off-screen releases are perfectly tracked
+    window.addEventListener("touchstart", handleTouch, { passive: true });
+    window.addEventListener("touchmove", handleTouch, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", handleTouchEnd, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       clearDeactivationTimeout();
-      if (gridEl) {
-        gridEl.removeEventListener("touchstart", handleTouch);
-        gridEl.removeEventListener("touchmove", handleTouch);
-        gridEl.removeEventListener("touchend", handleTouchEnd);
-        gridEl.removeEventListener("touchcancel", handleTouchEnd);
-      }
+      window.removeEventListener("touchstart", handleTouch);
+      window.removeEventListener("touchmove", handleTouch);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchcancel", handleTouchEnd);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -209,10 +213,7 @@ export function ProductGrid() {
           </p>
         </div>
 
-        <div
-          ref={gridRef}
-          className="relative z-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4"
-        >
+        <div className="relative z-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           {products.map((p) => (
             <ProductCard
               key={p.id}
