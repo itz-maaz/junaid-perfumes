@@ -150,8 +150,8 @@ function ProductCard({ product }: { product: Product }) {
           </div>
 
           <span
-            className={`absolute font-semibold text-brand-green transition-all duration-300 ease-out text-xs sm:text-sm md:group-hover:bottom-[40px] md:group-hover:left-[4%] md:group-focus-within:bottom-[40px] md:group-focus-within:left-[4%] ${
-              isTouched ? "bottom-[40px] sm:bottom-[44px] left-[4%]" : "bottom-2 left-0"
+            className={`absolute font-semibold text-brand-green transition-all duration-300 ease-out text-xs sm:text-sm md:group-hover:bottom-[48px] md:group-hover:left-1/2 md:group-hover:-translate-x-1/2 md:group-focus-within:bottom-[48px] md:group-focus-within:left-1/2 md:group-focus-within:-translate-x-1/2 ${
+              isTouched ? "bottom-[48px] left-1/2 -translate-x-1/2" : "bottom-2 left-0 translate-x-0"
             }`}
           >
             {product.price}
