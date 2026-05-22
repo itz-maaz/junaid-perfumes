@@ -119,21 +119,21 @@ function ProductPage() {
 
       <Navbar />
 
-      <main className="flex-1 w-full max-w-6xl mx-auto px-6 py-8 md:py-16 z-10">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-3 md:px-6 md:py-16 z-10">
         {/* Back Link */}
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors duration-300 mb-8 md:mb-12 group text-xs uppercase tracking-widest font-semibold"
+          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors duration-300 mb-3 md:mb-12 group text-xs uppercase tracking-widest font-semibold"
         >
           <ChevronLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
           Back to Collection
         </Link>
 
         {/* Two Column Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-16">
           {/* LEFT COLUMN: Zoomable Premium Image Container & Gallery Slides */}
           <div className="md:col-span-6 flex flex-col items-center">
-            <div className="relative w-full aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-md shadow-2xl shadow-black/80 group">
+            <div className="relative w-full h-56 xs:h-64 sm:h-72 md:h-auto md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-md shadow-2xl shadow-black/80 group flex items-center justify-center">
               {/* Product Badge */}
               <span className="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-zinc-300 border border-white/10">
                 <Sparkles className="h-3 w-3 text-brand-green" />
@@ -147,7 +147,7 @@ function ProductPage() {
                     : product.image
                 }
                 alt={`${product.name} - View ${activeImageIndex + 1}`}
-                className="h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-[1.03]"
+                className="h-full w-full object-contain md:object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-[1.03]"
               />
 
               {/* Elegant shadow gradient */}
@@ -156,7 +156,7 @@ function ProductPage() {
 
             {/* Premium Slide Navigation / Thumbnails */}
             {product.images && product.images.length > 1 && (
-              <div className="flex justify-center gap-3 mt-4 w-full">
+              <div className="flex justify-center gap-3 mt-2.5 md:mt-4 w-full">
                 {product.images.map((imgUrl, idx) => {
                   const isSelected = activeImageIndex === idx;
                   return (
@@ -164,7 +164,7 @@ function ProductPage() {
                       key={idx}
                       type="button"
                       onClick={() => setActiveImageIndex(idx)}
-                      className={`relative w-16 h-20 sm:w-20 sm:h-24 rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer ${
+                      className={`relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-24 rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer ${
                         isSelected
                           ? "border-brand-green ring-2 ring-brand-green/20 scale-105"
                           : "border-white/10 opacity-60 hover:opacity-100 hover:border-white/30"
@@ -191,17 +191,17 @@ function ProductPage() {
             </span>
 
             {/* Product Title */}
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium tracking-wide text-white mt-3">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium tracking-wide text-white mt-2 md:mt-3">
               {product.name}
             </h1>
 
             {/* Scent Summary */}
-            <p className="text-xs sm:text-sm text-zinc-400 font-medium tracking-wider mt-2.5">
+            <p className="text-xs sm:text-sm text-zinc-400 font-medium tracking-wider mt-1 md:mt-2.5">
               {product.notes}
             </p>
 
             {/* Dynamic Price */}
-            <div className="flex items-baseline gap-3 mt-4">
+            <div className="flex items-baseline gap-3 mt-2 md:mt-4">
               <span className="font-serif text-2xl sm:text-3xl text-zinc-100 font-semibold leading-none">
                 {currentPrice}
               </span>
@@ -211,7 +211,7 @@ function ProductPage() {
             </div>
 
             {/* Divider */}
-            <div className="w-full h-px bg-zinc-900 my-6" />
+            <div className="w-full h-px bg-zinc-900 my-3 md:my-6" />
 
             {/* Rich Description */}
             <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed">
@@ -219,7 +219,7 @@ function ProductPage() {
             </p>
 
             {/* Highlights pills */}
-            <div className="flex flex-wrap gap-2 mt-6">
+            <div className="flex flex-wrap gap-2 mt-4 md:mt-6">
               {product.highlights.map((hl) => (
                 <span
                   key={hl}
@@ -232,7 +232,7 @@ function ProductPage() {
             </div>
 
             {/* Size Selector */}
-            <div className="mt-8">
+            <div className="mt-4 md:mt-8">
               <span className="text-[10px] uppercase tracking-[0.25em] text-zinc-400 font-bold block mb-3">
                 Select Volume
               </span>
@@ -262,7 +262,7 @@ function ProductPage() {
             </div>
 
             {/* Action Buttons */}
-            <div className="mt-8 flex flex-col gap-3">
+            <div className="mt-4 md:mt-8 flex flex-col gap-3">
               <button
                 type="button"
                 onClick={handleBuyNow}
