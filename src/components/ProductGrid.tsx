@@ -8,52 +8,12 @@ import * as React from "react";
 function ProductCard({
   product,
   isActive,
-  onActive,
-  onDeactivate,
 }: {
   product: Product;
   isActive: boolean;
-  onActive: () => void;
-  onDeactivate: () => void;
 }) {
   const navigate = useNavigate();
   const { buyNow } = useCart();
-  const cardRef = React.useRef<HTMLDivElement>(null);
-  const isActiveRef = React.useRef(isActive);
-
-  React.useEffect(() => {
-    isActiveRef.current = isActive;
-  }, [isActive]);
-
-  React.useEffect(() => {
-    // Detect touch device
-    const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    if (!isTouch) return;
-
-    // Use IntersectionObserver to activate the card when it enters the sweet spot of mobile screen
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          onActive();
-        } else if (isActiveRef.current) {
-          onDeactivate();
-        }
-      },
-      {
-        root: null, // viewport
-        rootMargin: "-25% 0px -25% 0px", // focus on the middle region of the viewport
-        threshold: 0.35, // triggers when 35% of card is in the sweet spot
-      }
-    );
-
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [onActive, onDeactivate]);
 
   const goToProduct = () => {
     navigate(`/product/${product.id}`);
@@ -74,11 +34,7 @@ function ProductCard({
 
   return (
     <div
-      ref={cardRef}
-      onTouchStart={() => {
-        // Activate this card immediately on touch
-        onActive();
-      }}
+      data-product-id={product.id}
       className={`product-card-wrapper group relative flex flex-col overflow-hidden rounded-xl border bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_12px_30px_rgba(0,0,0,0.5)] active:-translate-y-2 active:scale-[1.02] active:border-white/15 active:shadow-[0_12px_30px_rgba(0,0,0,0.5)] focus-within:-translate-y-2 focus-within:scale-[1.02] focus-within:border-white/15 focus-within:shadow-[0_12px_30px_rgba(0,0,0,0.5)] ${
         isActive
           ? "-translate-y-2 scale-[1.02] border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.5)]"
@@ -170,20 +126,68 @@ function ProductCard({
 
 export function ProductGrid() {
   const [activeCardId, setActiveCardId] = React.useState<string | null>(null);
+  const gridRef = React.useRef<HTMLDivElement>(null);
+  const deactivationTimeoutRef = React.useRef<number | null>(null);
+
+  const clearDeactivationTimeout = () => {
+    if (deactivationTimeoutRef.current !== null) {
+      window.clearTimeout(deactivationTimeoutRef.current);
+      deactivationTimeoutRef.current = null;
+    }
+  };
 
   React.useEffect(() => {
-    const handleTouchOutside = (e: TouchEvent) => {
-      // If the touch is not inside a product card, clear the active card
-      const target = e.target as HTMLElement;
-      if (!target.closest(".product-card-wrapper")) {
+    const handleTouch = (e: TouchEvent) => {
+      // Clear any pending deactivation so dragging keeps cards active
+      clearDeactivationTimeout();
+
+      if (e.touches.length === 0) return;
+      const touch = e.touches[0];
+      
+      // Determine what element is directly under the finger coordinates
+      const element = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (!element) {
         setActiveCardId(null);
+        return;
       }
+
+      // Find the closest product card wrapper
+      const cardWrapper = element.closest(".product-card-wrapper");
+      if (cardWrapper) {
+        const id = cardWrapper.getAttribute("data-product-id");
+        if (id) {
+          setActiveCardId(id);
+          return;
+        }
+      }
+      
+      setActiveCardId(null);
     };
 
-    window.addEventListener("touchstart", handleTouchOutside, { passive: true });
+    const handleTouchEnd = () => {
+      clearDeactivationTimeout();
+      // Delay deactivation slightly so tap clicks (e.g. BUY NOW button) have time to process
+      deactivationTimeoutRef.current = window.setTimeout(() => {
+        setActiveCardId(null);
+      }, 200);
+    };
+
+    const gridEl = gridRef.current;
+    if (gridEl) {
+      gridEl.addEventListener("touchstart", handleTouch, { passive: true });
+      gridEl.addEventListener("touchmove", handleTouch, { passive: true });
+      gridEl.addEventListener("touchend", handleTouchEnd, { passive: true });
+      gridEl.addEventListener("touchcancel", handleTouchEnd, { passive: true });
+    }
 
     return () => {
-      window.removeEventListener("touchstart", handleTouchOutside);
+      clearDeactivationTimeout();
+      if (gridEl) {
+        gridEl.removeEventListener("touchstart", handleTouch);
+        gridEl.removeEventListener("touchmove", handleTouch);
+        gridEl.removeEventListener("touchend", handleTouchEnd);
+        gridEl.removeEventListener("touchcancel", handleTouchEnd);
+      }
     };
   }, []);
 
@@ -205,16 +209,15 @@ export function ProductGrid() {
           </p>
         </div>
 
-        <div className="relative z-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        <div
+          ref={gridRef}
+          className="relative z-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4"
+        >
           {products.map((p) => (
             <ProductCard
               key={p.id}
               product={p}
               isActive={activeCardId === p.id}
-              onActive={() => setActiveCardId(p.id)}
-              onDeactivate={() => {
-                setActiveCardId((curr) => (curr === p.id ? null : curr));
-              }}
             />
           ))}
         </div>
