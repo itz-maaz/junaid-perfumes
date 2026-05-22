@@ -64,7 +64,7 @@ function ProductCard({ product }: { product: Product }) {
             onClick={handleBuyNow}
             className="absolute inset-x-0 bottom-0 z-10 inline-flex items-center justify-center gap-2 rounded-full bg-brand-green py-2 text-xs font-semibold uppercase tracking-wider text-brand-green-foreground shadow-lg shadow-brand-green/25 opacity-0 translate-y-4 transition-all duration-300 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:pointer-events-auto group-active:opacity-100 group-active:scale-100 group-active:translate-y-0 group-active:pointer-events-auto group-focus-within:opacity-100 group-focus-within:scale-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto"
           >
-            <ShoppingCart className="h-4 w-4 shrink-0" strokeWidth={2} />
+            <ShoppingCart className="h-4 w-4 shrink-0 transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5 group-active:-translate-y-0.5 group-focus-within:-translate-y-0.5" strokeWidth={2} />
             Buy Now
           </button>
         </div>

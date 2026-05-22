@@ -56,11 +56,11 @@ export function Navbar() {
           <button
             aria-label="Cart"
             onClick={openCart}
-            className="relative p-1.5 hover:text-white transition-colors"
+            className="group relative p-1.5 hover:text-white transition-colors cursor-pointer"
           >
-            <ShoppingBag className="h-4 w-4" />
+            <ShoppingBag className="h-4 w-4 transition-all duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5 group-active:scale-95" />
             {count > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-green px-1 text-[9px] font-bold text-brand-green-foreground">
+              <span className="absolute -top-0.5 -right-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-green px-1 text-[9px] font-bold text-brand-green-foreground transition-transform duration-300 ease-out group-hover:scale-105 group-hover:-translate-y-0.5">
                 {count}
               </span>
             )}

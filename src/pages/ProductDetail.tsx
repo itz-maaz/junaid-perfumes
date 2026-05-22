@@ -232,20 +232,20 @@ function ProductPage() {
               <button
                 type="button"
                 onClick={handleBuyNow}
-                className="w-full rounded-full bg-brand-green py-2.5 sm:py-3 text-base sm:text-lg font-sans font-semibold tracking-normal text-black shadow-lg shadow-brand-green/25 transition-transform hover:bg-brand-green/90 active:scale-[0.98] cursor-pointer"
+                className="group w-full rounded-full bg-brand-green py-2.5 sm:py-3 text-base sm:text-lg font-sans font-semibold tracking-normal text-black shadow-lg shadow-brand-green/25 transition-transform hover:bg-brand-green/90 active:scale-[0.98] cursor-pointer"
               >
                 <span className="inline-flex items-center justify-center gap-2.5">
-                  <ShoppingCart className="h-5 w-5 shrink-0 text-black" strokeWidth={2.5} />
+                  <ShoppingCart className="h-5 w-5 shrink-0 text-black transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5" strokeWidth={2.5} />
                   Buy Now
                 </span>
               </button>
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="relative overflow-hidden w-full rounded-full bg-blue-400 py-2.5 sm:py-3 text-base sm:text-lg font-serif font-medium tracking-normal text-black shadow-md shadow-blue-400/30 transition-transform hover:bg-blue-500 active:scale-[0.98] cursor-pointer"
+                className="group relative overflow-hidden w-full rounded-full bg-blue-400 py-2.5 sm:py-3 text-base sm:text-lg font-serif font-medium tracking-normal text-black shadow-md shadow-blue-400/30 transition-transform hover:bg-blue-500 active:scale-[0.98] cursor-pointer"
               >
                 <span className="inline-flex items-center justify-center gap-2.5">
-                  <ShoppingBag className="h-5 w-5 shrink-0 text-black" strokeWidth={2.5} />
+                  <ShoppingBag className="h-5 w-5 shrink-0 text-black transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5" strokeWidth={2.5} />
                   {isAdded ? "Added to Cart" : "Add to Cart"}
                 </span>
               </button>
