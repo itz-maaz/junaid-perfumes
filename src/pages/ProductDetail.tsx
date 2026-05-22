@@ -228,16 +228,14 @@ function ProductPage() {
             </p>
 
             {/* Highlights pills */}
-            <div className="flex flex-wrap items-center gap-x-3.5 gap-y-2 mt-4 md:mt-6">
-              {product.highlights.map((hl, idx) => (
-                <Fragment key={hl}>
-                  {idx > 0 && (
-                    <span className="text-amber-500/30 text-xs font-light select-none shrink-0">/</span>
-                  )}
-                  <span className="text-[10.5px] sm:text-xs font-light uppercase tracking-[0.16em] text-zinc-300 whitespace-nowrap">
-                    {hl}
-                  </span>
-                </Fragment>
+            <div className="flex flex-wrap gap-2.5 mt-4 md:mt-6">
+              {product.highlights.map((hl) => (
+                <span
+                  key={hl}
+                  className="inline-flex items-center text-[9.5px] sm:text-[10.5px] font-semibold uppercase tracking-[0.12em] text-zinc-200 bg-white/5 border border-white/10 rounded px-2.5 py-1 whitespace-nowrap shrink-0"
+                >
+                  {hl}
+                </span>
               ))}
             </div>
 

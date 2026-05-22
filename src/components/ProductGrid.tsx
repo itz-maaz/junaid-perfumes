@@ -180,14 +180,12 @@ function ProductCard({
           >
             <div className="flex flex-nowrap items-center gap-x-2 overflow-hidden w-full">
               {product.highlights.slice(0, 2).map((h, i) => (
-                <React.Fragment key={i}>
-                  {i > 0 && (
-                    <span className="text-amber-500/30 text-[9px] font-light select-none shrink-0">/</span>
-                  )}
-                  <span className="text-[8.5px] sm:text-[9px] font-light uppercase tracking-[0.08em] text-zinc-300 whitespace-nowrap shrink-0">
-                    {h}
-                  </span>
-                </React.Fragment>
+                <span
+                  key={i}
+                  className="inline-flex items-center text-[7.5px] sm:text-[8px] font-semibold uppercase tracking-[0.08em] text-zinc-300 bg-white/5 border border-white/10 rounded px-1.5 py-0.5 whitespace-nowrap shrink-0"
+                >
+                  {h}
+                </span>
               ))}
             </div>
           </div>
