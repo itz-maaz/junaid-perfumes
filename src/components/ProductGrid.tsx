@@ -5,14 +5,23 @@ import { products } from "@/data/products";
 import type { Product } from "@/data/products";
 import * as React from "react";
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({
+  product,
+  activeTouchedCardId,
+  setActiveTouchedCardId,
+}: {
+  product: Product;
+  activeTouchedCardId: string | null;
+  setActiveTouchedCardId: React.Dispatch<React.SetStateAction<string | null>>;
+}) {
   const navigate = useNavigate();
   const { buyNow } = useCart();
-  const [isTouched, setIsTouched] = React.useState(false);
+  const isTouched = activeTouchedCardId === product.id;
   const touchStartYRef = React.useRef<number | null>(null);
   const touchStartXRef = React.useRef<number | null>(null);
   const touchTimeoutRef = React.useRef<number | null>(null);
   const touchStartTimeoutRef = React.useRef<number | null>(null);
+  const hasMovedRef = React.useRef<boolean>(false);
 
   const goToProduct = () => {
     navigate(`/product/${product.id}`);
@@ -32,6 +41,9 @@ function ProductCard({ product }: { product: Product }) {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    // Tapping another card instantly closes any previously active card popup
+    setActiveTouchedCardId(null);
+
     if (touchTimeoutRef.current !== null) {
       window.clearTimeout(touchTimeoutRef.current);
       touchTimeoutRef.current = null;
@@ -41,15 +53,18 @@ function ProductCard({ product }: { product: Product }) {
       touchStartTimeoutRef.current = null;
     }
 
+    hasMovedRef.current = false;
     const touch = e.touches[0];
     touchStartYRef.current = touch.clientY;
     touchStartXRef.current = touch.clientX;
 
     // Delay the touch activation slightly to distinguish intentional holds from scroll swipes
     touchStartTimeoutRef.current = window.setTimeout(() => {
-      setIsTouched(true);
+      if (!hasMovedRef.current) {
+        setActiveTouchedCardId(product.id);
+      }
       touchStartTimeoutRef.current = null;
-    }, 180);
+    }, 200);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -58,13 +73,16 @@ function ProductCard({ product }: { product: Product }) {
     const diffY = Math.abs(touch.clientY - touchStartYRef.current);
     const diffX = Math.abs(touch.clientX - touchStartXRef.current);
 
-    // If the finger moves more than 10 pixels, they are scrolling, so deactivate instantly
-    if (diffY > 10 || diffX > 10) {
+    // If the finger moves even slightly (more than 5 pixels), they are scrolling/swiping, so cancel popup instantly
+    if (diffY > 5 || diffX > 5) {
+      hasMovedRef.current = true;
       if (touchStartTimeoutRef.current !== null) {
         window.clearTimeout(touchStartTimeoutRef.current);
         touchStartTimeoutRef.current = null;
       }
-      setIsTouched(false);
+      if (isTouched) {
+        setActiveTouchedCardId(null);
+      }
       touchStartYRef.current = null;
       touchStartXRef.current = null;
     }
@@ -79,14 +97,21 @@ function ProductCard({ product }: { product: Product }) {
       touchStartTimeoutRef.current = null;
     }
 
-    if (touchTimeoutRef.current !== null) {
-      window.clearTimeout(touchTimeoutRef.current);
+    if (isTouched) {
+      if (touchTimeoutRef.current !== null) {
+        window.clearTimeout(touchTimeoutRef.current);
+      }
+      // Delay deactivation so the BUY NOW click can process and then fade out elegantly
+      touchTimeoutRef.current = window.setTimeout(() => {
+        setActiveTouchedCardId((currentId) => {
+          if (currentId === product.id) {
+            return null;
+          }
+          return currentId;
+        });
+        touchTimeoutRef.current = null;
+      }, 1500); // 1.5 seconds allows comfortable time to click and then fades away
     }
-    // Delay deactivation so the BUY NOW click can process and then fade out elegantly
-    touchTimeoutRef.current = window.setTimeout(() => {
-      setIsTouched(false);
-      touchTimeoutRef.current = null;
-    }, 1500); // 1.5 seconds allows comfortable time to click and then fades away
   };
 
   const handleTouchCancel = () => {
@@ -98,13 +123,20 @@ function ProductCard({ product }: { product: Product }) {
       touchStartTimeoutRef.current = null;
     }
 
-    if (touchTimeoutRef.current !== null) {
-      window.clearTimeout(touchTimeoutRef.current);
+    if (isTouched) {
+      if (touchTimeoutRef.current !== null) {
+        window.clearTimeout(touchTimeoutRef.current);
+      }
+      touchTimeoutRef.current = window.setTimeout(() => {
+        setActiveTouchedCardId((currentId) => {
+          if (currentId === product.id) {
+            return null;
+          }
+          return currentId;
+        });
+        touchTimeoutRef.current = null;
+      }, 1500);
     }
-    touchTimeoutRef.current = window.setTimeout(() => {
-      setIsTouched(false);
-      touchTimeoutRef.current = null;
-    }, 1500);
   };
 
   React.useEffect(() => {
@@ -180,8 +212,8 @@ function ProductCard({ product }: { product: Product }) {
           </div>
 
           <span
-            className={`absolute font-semibold text-brand-green transition-all duration-300 ease-out text-xs sm:text-sm md:group-hover:bottom-[40px] md:group-hover:left-1/2 md:group-hover:-translate-x-1/2 md:group-focus-within:bottom-[40px] md:group-focus-within:left-1/2 md:group-focus-within:-translate-x-1/2 ${
-              isTouched ? "bottom-[40px] left-1/2 -translate-x-1/2" : "bottom-2 left-0 translate-x-0"
+            className={`absolute font-semibold text-brand-green transition-all duration-300 ease-out text-xs sm:text-sm md:group-hover:bottom-[35px] md:group-hover:left-1/2 md:group-hover:-translate-x-1/2 md:group-focus-within:bottom-[35px] md:group-focus-within:left-1/2 md:group-focus-within:-translate-x-1/2 ${
+              isTouched ? "bottom-[35px] left-1/2 -translate-x-1/2" : "bottom-2 left-0 translate-x-0"
             }`}
           >
             {product.price}
@@ -210,6 +242,19 @@ function ProductCard({ product }: { product: Product }) {
 }
 
 export function ProductGrid() {
+  const [activeTouchedCardId, setActiveTouchedCardId] = React.useState<string | null>(null);
+
+  // Global scroll listener to close any open popup immediately when the user scrolls the page
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setActiveTouchedCardId(null);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <section
       id="collection"
@@ -230,7 +275,12 @@ export function ProductGrid() {
 
         <div className="relative z-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
+            <ProductCard
+              key={p.id}
+              product={p}
+              activeTouchedCardId={activeTouchedCardId}
+              setActiveTouchedCardId={setActiveTouchedCardId}
+            />
           ))}
         </div>
       </div>
