@@ -98,7 +98,7 @@ export function Hero() {
             style={{
               transition: "opacity 1500ms ease-in-out",
             }}
-            className={`absolute inset-0 h-full w-full object-cover object-center ${
+            className={`absolute inset-0 h-full w-full object-cover object-center brightness-[0.6] contrast-[1.05] saturate-[0.9] ${
               i === index
                 ? "opacity-100 z-10"
                 : i === prevIndex
@@ -107,11 +107,14 @@ export function Hero() {
             }`}
           />
         ))}
+        {/* Desktop-only dark shade overlay to enhance contrast and add a royal atmosphere */}
+        <div className="hidden md:block absolute inset-0 bg-black/25 z-10 pointer-events-none" />
+
         {/* Desktop-only horizontal gradient overlay to melt the image edge seamlessly */}
         <div className="hidden md:block absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black to-transparent z-20 pointer-events-none" />
 
         {/* Mobile-only gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/80 z-[5] md:hidden" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/90 z-[5] md:hidden" />
       </div>
     </section>
   );
