@@ -26,7 +26,10 @@ function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_12px_30px_rgba(0,0,0,0.5)] active:-translate-y-2 active:scale-[1.02] active:border-white/15 active:shadow-[0_12px_30px_rgba(0,0,0,0.5)] focus-within:-translate-y-2 focus-within:scale-[1.02] focus-within:border-white/15 focus-within:shadow-[0_12px_30px_rgba(0,0,0,0.5)]">
+    <div
+      onTouchStart={() => {}}
+      className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_12px_30px_rgba(0,0,0,0.5)] active:-translate-y-2 active:scale-[1.02] active:border-white/15 active:shadow-[0_12px_30px_rgba(0,0,0,0.5)] focus-within:-translate-y-2 focus-within:scale-[1.02] focus-within:border-white/15 focus-within:shadow-[0_12px_30px_rgba(0,0,0,0.5)]"
+    >
       <button
         type="button"
         onClick={goToProduct}
