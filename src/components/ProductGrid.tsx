@@ -157,9 +157,9 @@ function ProductCard({
         />
       </button>
 
-      <div className="flex flex-col gap-1 px-2 py-1.5 sm:px-2.5 sm:py-2">
-        <div>
-          <button type="button" onClick={goToProduct} className="w-full text-left cursor-pointer">
+      <div className="flex flex-col gap-0.5 px-2 py-1 sm:px-2.5 sm:py-1.5">
+        <div className="space-y-0.5">
+          <button type="button" onClick={goToProduct} className="w-full text-left cursor-pointer block">
             <h3 className="font-serif text-sm sm:text-base leading-tight text-white truncate hover:text-brand-green transition-colors">
               {product.name}
             </h3>
@@ -169,33 +169,32 @@ function ProductCard({
           </p>
         </div>
 
-        <div className="relative w-full h-14 sm:h-16">
+        <div className="relative w-full h-11 sm:h-12 mt-1">
           {/* Brand highlights shown only when NOT hovering / active */}
           <div
-            className={`absolute top-1.5 left-0 right-0 transition-all duration-300 ease-out md:group-hover:opacity-0 md:group-hover:-translate-y-2 md:group-hover:pointer-events-none md:group-focus-within:opacity-0 md:group-focus-within:-translate-y-2 md:group-focus-within:pointer-events-none ${
+            className={`absolute top-0.5 left-0 right-0 transition-all duration-300 ease-out md:group-hover:opacity-0 md:group-hover:-translate-y-1 md:group-hover:pointer-events-none md:group-focus-within:opacity-0 md:group-focus-within:-translate-y-1 md:group-focus-within:pointer-events-none ${
               isTouched
-                ? "opacity-0 -translate-y-2 pointer-events-none"
+                ? "opacity-0 -translate-y-1 pointer-events-none"
                 : "opacity-100 translate-y-0 pointer-events-auto"
             }`}
           >
-            <div className="flex flex-nowrap items-center gap-x-2.5 pt-2.5 overflow-hidden w-full">
+            <div className="flex flex-nowrap items-center gap-x-2 overflow-hidden w-full">
               {product.highlights.slice(0, 2).map((h, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-1.5 shrink-0"
-                >
-                  <span className="h-1 w-1 rounded-full bg-amber-500/40 shrink-0" />
-                  <span className="text-[8.5px] sm:text-[9px] font-light uppercase tracking-[0.06em] text-zinc-300 whitespace-nowrap">
+                <React.Fragment key={i}>
+                  {i > 0 && (
+                    <span className="text-amber-500/30 text-[9px] font-light select-none shrink-0">/</span>
+                  )}
+                  <span className="text-[8.5px] sm:text-[9px] font-light uppercase tracking-[0.08em] text-zinc-300 whitespace-nowrap shrink-0">
                     {h}
                   </span>
-                </div>
+                </React.Fragment>
               ))}
             </div>
           </div>
 
           <span
-            className={`absolute font-semibold text-brand-green transition-all duration-300 ease-out text-xs sm:text-sm md:group-hover:bottom-[44px] md:group-hover:left-1/2 md:group-hover:-translate-x-1/2 md:group-focus-within:bottom-[44px] md:group-focus-within:left-1/2 md:group-focus-within:-translate-x-1/2 ${
-              isTouched ? "bottom-[44px] left-1/2 -translate-x-1/2" : "bottom-2 left-0 translate-x-0"
+            className={`absolute font-semibold text-brand-green transition-all duration-300 ease-out text-xs sm:text-sm md:group-hover:bottom-[28px] md:group-hover:left-1/2 md:group-hover:-translate-x-1/2 md:group-focus-within:bottom-[28px] md:group-focus-within:left-1/2 md:group-focus-within:-translate-x-1/2 ${
+              isTouched ? "bottom-[28px] left-1/2 -translate-x-1/2" : "bottom-0 left-0 translate-x-0"
             }`}
           >
             {product.price}
@@ -203,14 +202,14 @@ function ProductCard({
           <button
             type="button"
             onClick={handleBuyNow}
-            className={`absolute inset-x-[4%] bottom-1 z-10 inline-flex items-center justify-center gap-2 rounded-full bg-brand-green py-2 text-xs font-semibold uppercase tracking-wider text-brand-green-foreground shadow-lg shadow-brand-green/25 transition-all duration-300 ease-out cursor-pointer md:group-hover:opacity-100 md:group-hover:scale-100 md:group-hover:translate-y-0 md:group-hover:pointer-events-auto md:group-focus-within:opacity-100 md:group-focus-within:scale-100 md:group-focus-within:translate-y-0 md:group-focus-within:pointer-events-auto ${
+            className={`absolute inset-x-[4%] bottom-0 z-10 inline-flex items-center justify-center gap-2 rounded-full bg-brand-green py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-green-foreground shadow-lg shadow-brand-green/25 transition-all duration-300 ease-out cursor-pointer md:group-hover:opacity-100 md:group-hover:scale-100 md:group-hover:translate-y-0 md:group-hover:pointer-events-auto md:group-focus-within:opacity-100 md:group-focus-within:scale-100 md:group-focus-within:translate-y-0 md:group-focus-within:pointer-events-auto ${
               isTouched
                 ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 scale-95 translate-y-4 pointer-events-none"
+                : "opacity-0 scale-95 translate-y-3 pointer-events-none"
             }`}
           >
             <ShoppingCart
-              className={`h-4 w-4 shrink-0 transition-transform duration-300 ease-out md:group-hover:scale-110 md:group-hover:-translate-y-0.5 md:group-focus-within:-translate-y-0.5 ${
+              className={`h-3.5 w-3.5 shrink-0 transition-transform duration-300 ease-out md:group-hover:scale-110 md:group-hover:-translate-y-0.5 md:group-focus-within:-translate-y-0.5 ${
                 isTouched ? "scale-110 -translate-y-0.5" : ""
               }`}
               strokeWidth={2}

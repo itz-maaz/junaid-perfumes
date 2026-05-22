@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import {
   ChevronLeft,
   ShoppingBag,
@@ -228,14 +228,16 @@ function ProductPage() {
             </p>
 
             {/* Highlights pills */}
-            <div className="flex flex-wrap gap-x-5 gap-y-2 mt-4 md:mt-6">
-              {product.highlights.map((hl) => (
-                <div key={hl} className="flex items-center gap-2 shrink-0">
-                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500/50 shrink-0" />
+            <div className="flex flex-wrap items-center gap-x-3.5 gap-y-2 mt-4 md:mt-6">
+              {product.highlights.map((hl, idx) => (
+                <Fragment key={hl}>
+                  {idx > 0 && (
+                    <span className="text-amber-500/30 text-xs font-light select-none shrink-0">/</span>
+                  )}
                   <span className="text-[10.5px] sm:text-xs font-light uppercase tracking-[0.16em] text-zinc-300 whitespace-nowrap">
                     {hl}
                   </span>
-                </div>
+                </Fragment>
               ))}
             </div>
 
