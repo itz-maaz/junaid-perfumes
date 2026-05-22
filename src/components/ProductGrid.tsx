@@ -178,14 +178,14 @@ function ProductCard({
                 : "opacity-100 translate-y-0 pointer-events-auto"
             }`}
           >
-            <div className="flex flex-wrap gap-x-2.5 gap-y-1 pt-1.5 overflow-hidden">
+            <div className="flex flex-nowrap items-center gap-x-2 pt-2.5 overflow-hidden w-full">
               {product.highlights.slice(0, 2).map((h, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-1 shrink-0"
+                  className="flex items-center gap-0.5 shrink-0"
                 >
-                  <Sparkles className="h-2.5 w-2.5 text-amber-400/80 shrink-0" />
-                  <span className="text-[8.5px] sm:text-[9.5px] font-light uppercase tracking-[0.06em] text-zinc-300 whitespace-nowrap">
+                  <Sparkles className="h-2 w-2 text-amber-400/80 shrink-0" />
+                  <span className="text-[8px] sm:text-[9px] font-light uppercase tracking-[0.06em] text-zinc-300 whitespace-nowrap">
                     {h}
                   </span>
                 </div>
