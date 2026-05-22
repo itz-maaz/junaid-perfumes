@@ -34,11 +34,11 @@ export function Hero() {
 
     const first = setTimeout(() => {
       setIndex((i) => (i + 1) % slides.length);
-    }, 1500);
+    }, 1000);
 
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % slides.length);
-    }, 4500);
+    }, 2500);
 
     return () => {
       clearTimeout(first);
@@ -94,7 +94,7 @@ export function Hero() {
             width={1080}
             height={1920}
             style={{
-              transition: "opacity 1200ms ease-in-out",
+              transition: "opacity 800ms ease-in-out",
             }}
             className={`absolute inset-0 h-full w-full object-cover object-center ${
               i === index ? "opacity-100 z-10" : "opacity-0 z-0"

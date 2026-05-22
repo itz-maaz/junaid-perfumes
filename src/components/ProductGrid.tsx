@@ -145,10 +145,7 @@ export function ProductGrid() {
       
       // Determine what element is directly under the finger coordinates anywhere on the page
       const element = document.elementFromPoint(touch.clientX, touch.clientY);
-      if (!element) {
-        setActiveCardId(null);
-        return;
-      }
+      if (!element) return;
 
       // Find the closest product card wrapper
       const cardWrapper = element.closest(".product-card-wrapper");
@@ -156,12 +153,15 @@ export function ProductGrid() {
         const id = cardWrapper.getAttribute("data-product-id");
         if (id) {
           setActiveCardId(id);
-          return;
+        }
+      } else {
+        // Only clear if the finger has moved entirely outside the collection grid section.
+        // This prevents violent flickering when the finger slides over card gaps or text margins.
+        const gridSection = element.closest("#collection");
+        if (!gridSection) {
+          setActiveCardId(null);
         }
       }
-      
-      // If the finger slides off a product card wrapper, deactivate immediately
-      setActiveCardId(null);
     };
 
     const handleTouchEnd = () => {
