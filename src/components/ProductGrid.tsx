@@ -17,6 +17,11 @@ function ProductCard({
   const navigate = useNavigate();
   const { buyNow } = useCart();
   const isTouched = activeTouchedCardId === product.id;
+  const isTouchedRef = React.useRef(isTouched);
+  React.useEffect(() => {
+    isTouchedRef.current = isTouched;
+  }, [isTouched]);
+
   const touchStartYRef = React.useRef<number | null>(null);
   const touchStartXRef = React.useRef<number | null>(null);
   const touchTimeoutRef = React.useRef<number | null>(null);
@@ -41,9 +46,6 @@ function ProductCard({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // Tapping another card instantly closes any previously active card popup
-    setActiveTouchedCardId(null);
-
     if (touchTimeoutRef.current !== null) {
       window.clearTimeout(touchTimeoutRef.current);
       touchTimeoutRef.current = null;
@@ -57,6 +59,16 @@ function ProductCard({
     const touch = e.touches[0];
     touchStartYRef.current = touch.clientY;
     touchStartXRef.current = touch.clientX;
+
+    // If this card is already active, keep it active (just cancel deactivation timers) with 0ms delay
+    if (isTouchedRef.current) {
+      return;
+    }
+
+    // Tapping another card instantly closes any previously active card popup
+    if (activeTouchedCardId !== null && activeTouchedCardId !== product.id) {
+      setActiveTouchedCardId(null);
+    }
 
     // Delay the touch activation slightly (100ms) to filter out scroll swipes without feeling sluggish
     touchStartTimeoutRef.current = window.setTimeout(() => {
@@ -80,7 +92,7 @@ function ProductCard({
         window.clearTimeout(touchStartTimeoutRef.current);
         touchStartTimeoutRef.current = null;
       }
-      if (isTouched) {
+      if (isTouchedRef.current) {
         setActiveTouchedCardId(null);
       }
       touchStartYRef.current = null;
@@ -97,7 +109,8 @@ function ProductCard({
       touchStartTimeoutRef.current = null;
     }
 
-    if (isTouched) {
+    // Only set the deactivation timer if the card is active
+    if (isTouchedRef.current || activeTouchedCardId === product.id) {
       if (touchTimeoutRef.current !== null) {
         window.clearTimeout(touchTimeoutRef.current);
       }
@@ -123,7 +136,7 @@ function ProductCard({
       touchStartTimeoutRef.current = null;
     }
 
-    if (isTouched) {
+    if (isTouchedRef.current || activeTouchedCardId === product.id) {
       if (touchTimeoutRef.current !== null) {
         window.clearTimeout(touchTimeoutRef.current);
       }
