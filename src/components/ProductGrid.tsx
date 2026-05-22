@@ -101,7 +101,7 @@ function ProductCard({
       if (touchTimeoutRef.current !== null) {
         window.clearTimeout(touchTimeoutRef.current);
       }
-      // Delay deactivation briefly (250ms) so the BUY NOW click can process, then fades out immediately
+      // Delay deactivation for 2.5 seconds (2500ms) so the user has time to view/click
       touchTimeoutRef.current = window.setTimeout(() => {
         setActiveTouchedCardId((currentId) => {
           if (currentId === product.id) {
@@ -110,7 +110,7 @@ function ProductCard({
           return currentId;
         });
         touchTimeoutRef.current = null;
-      }, 250);
+      }, 2500);
     }
   };
 
@@ -135,7 +135,7 @@ function ProductCard({
           return currentId;
         });
         touchTimeoutRef.current = null;
-      }, 250);
+      }, 2500);
     }
   };
 
