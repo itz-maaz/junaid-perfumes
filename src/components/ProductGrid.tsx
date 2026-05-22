@@ -35,7 +35,7 @@ function ProductCard({
   return (
     <div
       data-product-id={product.id}
-      className={`product-card-wrapper product-hover-effect group relative flex flex-col overflow-hidden rounded-xl border bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-all duration-300 ease-out ${
+      className={`product-card-wrapper product-hover-effect group relative flex flex-col rounded-xl border bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-all duration-300 ease-out ${
         isActive
           ? "-translate-y-2 scale-[1.02] border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.5)]"
           : "border-white/5"
@@ -44,7 +44,7 @@ function ProductCard({
       <button
         type="button"
         onClick={goToProduct}
-        className="relative aspect-[4/5] w-full overflow-hidden bg-zinc-950 cursor-pointer text-left"
+        className="relative aspect-[4/5] w-full overflow-hidden rounded-t-xl bg-zinc-950 cursor-pointer text-left"
         aria-label={`View ${product.name}`}
       >
         <img
@@ -74,7 +74,7 @@ function ProductCard({
         <div className="relative w-full h-14 sm:h-16">
           {/* Brand highlights shown only when NOT hovering / active */}
           <div
-            className={`product-highlights absolute top-1.5 left-0 right-0 transition-all duration-300 ease-out ${
+            className={`product-highlights absolute top-1.5 left-0 right-0 transition-all duration-500 ease-out ${
               isActive
                 ? "opacity-0 -translate-y-2 pointer-events-none"
                 : "opacity-100 translate-y-0 pointer-events-auto"
@@ -93,7 +93,7 @@ function ProductCard({
           </div>
 
           <span
-            className={`product-price absolute font-semibold text-brand-green transition-all duration-300 ease-out ${
+            className={`product-price absolute font-semibold text-brand-green transition-all duration-500 ease-out ${
               isActive
                 ? "bottom-[40px] sm:bottom-[44px] left-[4%] text-xs sm:text-sm"
                 : "bottom-2 left-0 text-xs sm:text-sm"
@@ -104,10 +104,10 @@ function ProductCard({
           <button
             type="button"
             onClick={handleBuyNow}
-            className={`buy-now-btn absolute inset-x-[4%] bottom-1 z-10 inline-flex items-center justify-center gap-2 rounded-full bg-brand-green py-2 text-xs font-semibold uppercase tracking-wider text-brand-green-foreground shadow-lg shadow-brand-green/25 transition-all duration-300 ease-out cursor-pointer ${
+            className={`buy-now-btn absolute inset-x-[4%] bottom-1 z-10 inline-flex items-center justify-center gap-2 rounded-full bg-brand-green py-2 text-xs font-semibold uppercase tracking-wider text-brand-green-foreground shadow-lg shadow-brand-green/25 transition-all duration-500 ease-out cursor-pointer ${
               isActive
-                ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 scale-95 translate-y-2 pointer-events-none"
+                ? "opacity-100 translate-y-0 pointer-events-auto"
+                : "opacity-0 translate-y-4 pointer-events-none"
             }`}
           >
             <ShoppingCart
