@@ -18,7 +18,7 @@ const HUB = { x: 32, y: 60 };
 export function ShippingMap() {
   return (
     <section id="story" className="relative w-full bg-zinc-950 border-b border-zinc-900">
-      <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-14 sm:pt-12 sm:pb-20">
         <div className="mb-8 text-center">
           <p className="text-[10px] uppercase tracking-[0.4em] text-brand-green">Live Network</p>
           <h2 className="mt-2 font-serif text-2xl sm:text-4xl text-white leading-tight">
