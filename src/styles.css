@@ -40,9 +40,9 @@
   --radius: 0.5rem;
   --background: oklch(0.16 0.005 260);
   --foreground: oklch(0.97 0.005 260);
-  --card: oklch(0.20 0.006 260);
+  --card: oklch(0.2 0.006 260);
   --card-foreground: oklch(0.97 0.005 260);
-  --popover: oklch(0.20 0.006 260);
+  --popover: oklch(0.2 0.006 260);
   --popover-foreground: oklch(0.97 0.005 260);
   --primary: oklch(0.97 0.005 260);
   --primary-foreground: oklch(0.16 0.005 260);
@@ -67,7 +67,8 @@
     border-color: var(--color-border);
   }
 
-  html, body {
+  html,
+  body {
     scroll-behavior: smooth;
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -88,7 +89,7 @@
   .bg-slate-texture {
     background-image:
       radial-gradient(at 20% 0%, oklch(0.22 0.01 260 / 0.8) 0px, transparent 50%),
-      radial-gradient(at 80% 100%, oklch(0.20 0.015 200 / 0.6) 0px, transparent 50%),
+      radial-gradient(at 80% 100%, oklch(0.2 0.015 200 / 0.6) 0px, transparent 50%),
       linear-gradient(180deg, oklch(0.14 0.005 260), oklch(0.17 0.008 260));
   }
   .bg-india-grid {
@@ -115,44 +116,3 @@
 .animate-gallery-fade {
   animation: galleryFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-
-@media (hover: hover) {
-  .product-hover-effect:hover,
-  .product-hover-effect:focus-within {
-    transform: translateY(-8px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
-  }
-  .product-hover-effect:hover img,
-  .product-hover-effect:focus-within img {
-    transform: scale(1.1) !important;
-  }
-  .product-hover-effect:hover .product-highlights,
-  .product-hover-effect:focus-within .product-highlights {
-    opacity: 0 !important;
-    transform: translateY(-8px) !important;
-    pointer-events: none !important;
-  }
-  .product-hover-effect:hover .product-price,
-  .product-hover-effect:focus-within .product-price {
-    bottom: 40px !important;
-    left: 4% !important;
-  }
-  @media (min-width: 640px) {
-    .product-hover-effect:hover .product-price,
-    .product-hover-effect:focus-within .product-price {
-      bottom: 44px !important;
-    }
-  }
-  .product-hover-effect:hover .buy-now-btn,
-  .product-hover-effect:focus-within .buy-now-btn {
-    opacity: 1 !important;
-    transform: scale(1) translateY(0) !important;
-    pointer-events: auto !important;
-  }
-  .product-hover-effect:hover .buy-now-btn svg,
-  .product-hover-effect:focus-within .buy-now-btn svg {
-    transform: scale(1.1) translateY(-2px) !important;
-  }
-}
-

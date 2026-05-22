@@ -11,7 +11,10 @@ import perfume4 from "@/assets/perfume4.jpg";
 
 const slides = [
   { src: slide2, alt: "Crystal perfume bottle with jasmine on black marble" },
-  { src: perfume4, alt: "Luxury Chanel-style perfume bottle submerged in crystal clear water with beautiful splashes" },
+  {
+    src: perfume4,
+    alt: "Luxury Chanel-style perfume bottle submerged in crystal clear water with beautiful splashes",
+  },
   { src: perfumeOcean, alt: "Fresh ocean breeze luxury perfume bottle" },
   { src: heroPerfume, alt: "Luxury amber perfume bottle on silk with golden mist" },
   { src: perfume1, alt: "High-end amber perfume bottle with smoking mist and elegant candles" },
@@ -20,7 +23,6 @@ const slides = [
   { src: perfumeVelvetOud, alt: "Velvet oud perfume bottle in deep shadows" },
   { src: slide4, alt: "Golden perfume bottle with swirling mist and orchids" },
 ];
-
 
 export function Hero() {
   const [index, setIndex] = useState(0);
@@ -34,11 +36,11 @@ export function Hero() {
 
     const first = setTimeout(() => {
       setIndex((i) => (i + 1) % slides.length);
-    }, 1000);
+    }, 2000);
 
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % slides.length);
-    }, 2500);
+    }, 2000);
 
     return () => {
       clearTimeout(first);
@@ -48,16 +50,14 @@ export function Hero() {
 
   return (
     <section className="w-full min-h-[88vh] md:min-h-[80vh] md:h-[85vh] relative overflow-hidden bg-black flex flex-col md:flex-row">
-      
       {/* Massive subtle ambient glow in the middle behind everything */}
       <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-950/5 rounded-full blur-[150px] pointer-events-none z-0" />
 
       {/* LEFT COLUMN: Text & Branding */}
       <div className="absolute top-[35%] left-1/2 -translate-x-1/2 w-[90%] max-w-sm px-4 py-6 rounded-xl mx-auto backdrop-blur-[1px] bg-black/10 z-10 flex flex-col items-center text-center md:relative md:top-0 md:left-0 md:translate-x-0 md:max-w-none md:w-1/2 md:items-start md:text-left md:pl-12 md:pr-6 md:py-24 md:backdrop-blur-none md:bg-slate-texture md:rounded-none md:min-h-0 md:max-w-none md:mx-0">
-        
         {/* Luxury grid texture overlay on desktop */}
         <div className="hidden md:block absolute inset-0 bg-india-grid pointer-events-none opacity-40 z-0" />
-        
+
         {/* Soft edge blend to dissolve the boundary in the center */}
         <div className="hidden md:block absolute inset-y-0 right-0 w-1/4 bg-gradient-to-r from-transparent to-black z-0 pointer-events-none" />
 
@@ -68,7 +68,10 @@ export function Hero() {
           Junaid Perfumes · Est. 2026
         </p>
         <h1 className="relative z-10 mt-4 font-serif text-3xl sm:text-4xl md:text-5xl leading-[1.15] text-white break-words font-medium drop-shadow-[0_4px_8px_rgba(0,0,0,0.95)] md:drop-shadow-none">
-          Find Your <em className="font-serif italic font-normal text-rose-100/95 md:text-rose-200/95">Signature</em>{" "}
+          Find Your{" "}
+          <em className="font-serif italic font-normal text-rose-100/95 md:text-rose-200/95">
+            Signature
+          </em>{" "}
           Scent
         </h1>
 
@@ -94,7 +97,7 @@ export function Hero() {
             width={1080}
             height={1920}
             style={{
-              transition: "opacity 800ms ease-in-out",
+              transition: "opacity 1500ms ease-in-out",
             }}
             className={`absolute inset-0 h-full w-full object-cover object-center ${
               i === index ? "opacity-100 z-10" : "opacity-0 z-0"
@@ -103,11 +106,10 @@ export function Hero() {
         ))}
         {/* Desktop-only horizontal gradient overlay to melt the image edge seamlessly */}
         <div className="hidden md:block absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black to-transparent z-20 pointer-events-none" />
-        
+
         {/* Mobile-only gradient overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/80 z-[5] md:hidden" />
       </div>
-
     </section>
   );
 }
