@@ -72,8 +72,8 @@ export function Hero() {
 
       {/* LEFT COLUMN: Text & Branding */}
       <div className="relative w-full flex-1 px-6 py-8 z-10 flex flex-col items-center justify-center text-center bg-[#070708] border-none md:border-t-0 md:relative md:top-0 md:left-0 md:translate-x-0 md:max-w-none md:w-1/2 md:items-start md:text-left md:pl-12 md:pr-6 md:py-24 md:backdrop-blur-none md:bg-slate-texture md:rounded-none md:min-h-0 md:max-w-none md:mx-0 md:flex-none">
-        {/* Luxury grid texture overlay on desktop only */}
-        <div className="hidden md:block absolute inset-0 bg-india-grid pointer-events-none opacity-40 z-0" />
+        {/* Luxury grid texture overlay faded on all screens */}
+        <div className="absolute inset-0 bg-india-grid pointer-events-none opacity-[0.06] z-0" />
 
         {/* Soft edge blend to dissolve the boundary in the center */}
         <div className="hidden md:block absolute inset-y-0 right-0 w-1/4 bg-gradient-to-r from-transparent to-black z-0 pointer-events-none" />
@@ -98,7 +98,7 @@ export function Hero() {
         </p>
         <a
           href="#collection"
-          className="relative z-10 mt-8 inline-flex items-center justify-center rounded-full bg-brand-green px-8 py-3.5 text-xs sm:text-sm font-semibold uppercase tracking-widest text-brand-green-foreground shadow-lg shadow-brand-green/30 transition-all duration-300 hover:scale-105 active:scale-95 hover:bg-brand-green/90"
+          className="relative z-10 mt-4 md:mt-8 inline-flex items-center justify-center rounded-full bg-brand-green px-8 py-3.5 text-xs sm:text-sm font-semibold uppercase tracking-widest text-brand-green-foreground shadow-lg shadow-brand-green/30 transition-all duration-300 hover:scale-105 active:scale-95 hover:bg-brand-green/90"
         >
           Shop Collection
         </a>
