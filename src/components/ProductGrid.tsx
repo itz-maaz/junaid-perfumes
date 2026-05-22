@@ -5,23 +5,9 @@ import { products } from "@/data/products";
 import type { Product } from "@/data/products";
 import * as React from "react";
 
-function ProductCard({
-  product,
-  activeTouchedCardId,
-  setActiveTouchedCardId,
-}: {
-  product: Product;
-  activeTouchedCardId: string | null;
-  setActiveTouchedCardId: React.Dispatch<React.SetStateAction<string | null>>;
-}) {
+function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
   const { buyNow } = useCart();
-  const isTouched = activeTouchedCardId === product.id;
-  const touchStartYRef = React.useRef<number | null>(null);
-  const touchStartXRef = React.useRef<number | null>(null);
-  const touchTimeoutRef = React.useRef<number | null>(null);
-  const touchStartTimeoutRef = React.useRef<number | null>(null);
-  const hasMovedRef = React.useRef<boolean>(false);
 
   const goToProduct = () => {
     navigate(`/product/${product.id}`);
@@ -40,128 +26,8 @@ function ProductCard({
     });
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    // Tapping another card instantly closes any previously active card popup
-    setActiveTouchedCardId(null);
-
-    if (touchTimeoutRef.current !== null) {
-      window.clearTimeout(touchTimeoutRef.current);
-      touchTimeoutRef.current = null;
-    }
-    if (touchStartTimeoutRef.current !== null) {
-      window.clearTimeout(touchStartTimeoutRef.current);
-      touchStartTimeoutRef.current = null;
-    }
-
-    hasMovedRef.current = false;
-    const touch = e.touches[0];
-    touchStartYRef.current = touch.clientY;
-    touchStartXRef.current = touch.clientX;
-
-    // Delay the touch activation slightly (100ms) to filter out scroll swipes without feeling sluggish
-    touchStartTimeoutRef.current = window.setTimeout(() => {
-      if (!hasMovedRef.current) {
-        setActiveTouchedCardId(product.id);
-      }
-      touchStartTimeoutRef.current = null;
-    }, 100);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStartYRef.current === null || touchStartXRef.current === null) return;
-    const touch = e.touches[0];
-    const diffY = Math.abs(touch.clientY - touchStartYRef.current);
-    const diffX = Math.abs(touch.clientX - touchStartXRef.current);
-
-    // If the finger moves even slightly (more than 5 pixels), they are scrolling/swiping, so cancel popup instantly
-    if (diffY > 5 || diffX > 5) {
-      hasMovedRef.current = true;
-      if (touchStartTimeoutRef.current !== null) {
-        window.clearTimeout(touchStartTimeoutRef.current);
-        touchStartTimeoutRef.current = null;
-      }
-      if (isTouched) {
-        setActiveTouchedCardId(null);
-      }
-      touchStartYRef.current = null;
-      touchStartXRef.current = null;
-    }
-  };
-
-  const handleTouchEnd = () => {
-    touchStartYRef.current = null;
-    touchStartXRef.current = null;
-
-    if (touchStartTimeoutRef.current !== null) {
-      window.clearTimeout(touchStartTimeoutRef.current);
-      touchStartTimeoutRef.current = null;
-    }
-
-    if (isTouched) {
-      if (touchTimeoutRef.current !== null) {
-        window.clearTimeout(touchTimeoutRef.current);
-      }
-      // Delay deactivation briefly (250ms) so the BUY NOW click can process, then fades out immediately
-      touchTimeoutRef.current = window.setTimeout(() => {
-        setActiveTouchedCardId((currentId) => {
-          if (currentId === product.id) {
-            return null;
-          }
-          return currentId;
-        });
-        touchTimeoutRef.current = null;
-      }, 250);
-    }
-  };
-
-  const handleTouchCancel = () => {
-    touchStartYRef.current = null;
-    touchStartXRef.current = null;
-
-    if (touchStartTimeoutRef.current !== null) {
-      window.clearTimeout(touchStartTimeoutRef.current);
-      touchStartTimeoutRef.current = null;
-    }
-
-    if (isTouched) {
-      if (touchTimeoutRef.current !== null) {
-        window.clearTimeout(touchTimeoutRef.current);
-      }
-      touchTimeoutRef.current = window.setTimeout(() => {
-        setActiveTouchedCardId((currentId) => {
-          if (currentId === product.id) {
-            return null;
-          }
-          return currentId;
-        });
-        touchTimeoutRef.current = null;
-      }, 250);
-    }
-  };
-
-  React.useEffect(() => {
-    return () => {
-      if (touchTimeoutRef.current !== null) {
-        window.clearTimeout(touchTimeoutRef.current);
-      }
-      if (touchStartTimeoutRef.current !== null) {
-        window.clearTimeout(touchStartTimeoutRef.current);
-      }
-    };
-  }, []);
-
   return (
-    <div
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onTouchCancel={handleTouchCancel}
-      className={`group relative flex flex-col overflow-hidden rounded-xl border bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-all duration-300 ease-out md:hover:-translate-y-2 md:hover:scale-[1.02] md:hover:border-white/15 md:hover:shadow-[0_12px_30px_rgba(0,0,0,0.5)] md:focus-within:-translate-y-2 md:focus-within:scale-[1.02] md:focus-within:border-white/15 md:focus-within:shadow-[0_12px_30px_rgba(0,0,0,0.5)] ${
-        isTouched
-          ? "-translate-y-2 scale-[1.02] border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.5)]"
-          : "border-white/5"
-      }`}
-    >
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-transform hover:-translate-y-0.5">
       <button
         type="button"
         onClick={goToProduct}
@@ -172,68 +38,35 @@ function ProductCard({
           src={product.image}
           alt={product.name}
           loading="lazy"
-          className={`h-full w-full object-cover transition-transform duration-700 ease-out md:group-hover:scale-110 md:group-focus-within:scale-110 ${
-            isTouched ? "scale-110" : ""
-          }`}
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-active:scale-110"
         />
       </button>
 
       <div className="flex flex-col gap-1 px-2 py-1.5 sm:px-2.5 sm:py-2">
         <div>
-          <button type="button" onClick={goToProduct} className="w-full text-left cursor-pointer">
+          <button
+            type="button"
+            onClick={goToProduct}
+            className="w-full text-left cursor-pointer"
+          >
             <h3 className="font-serif text-sm sm:text-base leading-tight text-white truncate hover:text-brand-green transition-colors">
               {product.name}
             </h3>
           </button>
-          <p className="text-[10px] sm:text-xs text-zinc-400 truncate leading-snug">
-            {product.notes}
-          </p>
+          <p className="text-[10px] sm:text-xs text-zinc-400 truncate leading-snug">{product.notes}</p>
         </div>
 
-        <div className="relative w-full h-14 sm:h-16">
-          {/* Brand highlights shown only when NOT hovering / active */}
-          <div
-            className={`absolute top-1.5 left-0 right-0 transition-all duration-300 ease-out md:group-hover:opacity-0 md:group-hover:-translate-y-2 md:group-hover:pointer-events-none md:group-focus-within:opacity-0 md:group-focus-within:-translate-y-2 md:group-focus-within:pointer-events-none ${
-              isTouched
-                ? "opacity-0 -translate-y-2 pointer-events-none"
-                : "opacity-100 translate-y-0 pointer-events-auto"
-            }`}
-          >
-            <div className="flex flex-nowrap gap-1 overflow-hidden">
-              {product.highlights.slice(0, 2).map((h, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center text-[8px] sm:text-[9px] font-medium uppercase tracking-wider text-zinc-400 bg-white/5 border border-white/10 rounded px-1.5 py-0.5 whitespace-nowrap"
-                >
-                  {h}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <span
-            className={`absolute font-semibold text-brand-green transition-all duration-300 ease-out text-xs sm:text-sm md:group-hover:bottom-[35px] md:group-hover:left-1/2 md:group-hover:-translate-x-1/2 md:group-focus-within:bottom-[35px] md:group-focus-within:left-1/2 md:group-focus-within:-translate-x-1/2 ${
-              isTouched ? "bottom-[35px] left-1/2 -translate-x-1/2" : "bottom-2 left-0 translate-x-0"
-            }`}
-          >
+        <div className="relative flex h-9 w-full items-center justify-center sm:h-10">
+          <span className="text-xs sm:text-sm font-semibold text-amber-300 leading-none transition-opacity duration-300 group-hover:opacity-0 group-active:opacity-0">
             {product.price}
           </span>
           <button
             type="button"
             onClick={handleBuyNow}
-            className={`absolute inset-x-[4%] bottom-1 z-10 inline-flex items-center justify-center gap-2 rounded-full bg-brand-green py-2 text-xs font-semibold uppercase tracking-wider text-brand-green-foreground shadow-lg shadow-brand-green/25 transition-all duration-300 ease-out cursor-pointer md:group-hover:opacity-100 md:group-hover:scale-100 md:group-hover:translate-y-0 md:group-hover:pointer-events-auto md:group-focus-within:opacity-100 md:group-focus-within:scale-100 md:group-focus-within:translate-y-0 md:group-focus-within:pointer-events-auto ${
-              isTouched
-                ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 scale-95 translate-y-4 pointer-events-none"
-            }`}
+            className="absolute inset-x-[4%] inset-y-0 z-10 inline-flex items-center justify-center gap-2 rounded-full bg-brand-green py-2 text-xs font-semibold uppercase tracking-wider text-brand-green-foreground shadow-lg shadow-brand-green/25 opacity-0 scale-95 transition-all duration-300 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto group-active:opacity-100 group-active:scale-100 group-active:pointer-events-auto"
           >
-            <ShoppingCart
-              className={`h-4 w-4 shrink-0 transition-transform duration-300 ease-out md:group-hover:scale-110 md:group-hover:-translate-y-0.5 md:group-focus-within:-translate-y-0.5 ${
-                isTouched ? "scale-110 -translate-y-0.5" : ""
-              }`}
-              strokeWidth={2}
-            />
-            BUY NOW
+            <ShoppingCart className="h-4 w-4 shrink-0" strokeWidth={2} />
+            Buy Now
           </button>
         </div>
       </div>
@@ -242,19 +75,6 @@ function ProductCard({
 }
 
 export function ProductGrid() {
-  const [activeTouchedCardId, setActiveTouchedCardId] = React.useState<string | null>(null);
-
-  // Global scroll listener to close any open popup immediately when the user scrolls the page
-  React.useEffect(() => {
-    const handleScroll = () => {
-      setActiveTouchedCardId(null);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
     <section
       id="collection"
@@ -275,12 +95,7 @@ export function ProductGrid() {
 
         <div className="relative z-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
           {products.map((p) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              activeTouchedCardId={activeTouchedCardId}
-              setActiveTouchedCardId={setActiveTouchedCardId}
-            />
+            <ProductCard key={p.id} product={p} />
           ))}
         </div>
       </div>
