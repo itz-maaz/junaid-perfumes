@@ -22,6 +22,7 @@ function ProductCard({
     isTouchedRef.current = isTouched;
   }, [isTouched]);
 
+  const isFingerDownRef = React.useRef<boolean>(false);
   const touchStartYRef = React.useRef<number | null>(null);
   const touchStartXRef = React.useRef<number | null>(null);
   const touchTimeoutRef = React.useRef<number | null>(null);
@@ -46,6 +47,8 @@ function ProductCard({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    isFingerDownRef.current = true;
+
     if (touchTimeoutRef.current !== null) {
       window.clearTimeout(touchTimeoutRef.current);
       touchTimeoutRef.current = null;
@@ -60,7 +63,7 @@ function ProductCard({
     touchStartYRef.current = touch.clientY;
     touchStartXRef.current = touch.clientX;
 
-    // If this card is already active, keep it active (just cancel deactivation timers) with 0ms delay
+    // If this card is already active, keep it active (cancel deactivation timers)
     if (isTouchedRef.current) {
       return;
     }
@@ -87,6 +90,7 @@ function ProductCard({
 
     // If the finger moves even slightly (more than 5 pixels), they are scrolling/swiping, so cancel popup instantly
     if (diffY > 5 || diffX > 5) {
+      isFingerDownRef.current = false;
       hasMovedRef.current = true;
       if (touchStartTimeoutRef.current !== null) {
         window.clearTimeout(touchStartTimeoutRef.current);
@@ -101,20 +105,43 @@ function ProductCard({
   };
 
   const handleTouchEnd = () => {
+    isFingerDownRef.current = false;
     touchStartYRef.current = null;
     touchStartXRef.current = null;
 
+    // Case A: User tapped very quickly (finger lifted before 100ms activation delay)
+    // and they didn't scroll (hasMovedRef.current is false).
+    // We want to trigger activation immediately now that they completed a tap!
     if (touchStartTimeoutRef.current !== null) {
       window.clearTimeout(touchStartTimeoutRef.current);
       touchStartTimeoutRef.current = null;
+
+      if (!hasMovedRef.current) {
+        setActiveTouchedCardId(product.id);
+        // Schedule deactivation timer immediately since finger is already lifted
+        if (touchTimeoutRef.current !== null) {
+          window.clearTimeout(touchTimeoutRef.current);
+        }
+        touchTimeoutRef.current = window.setTimeout(() => {
+          setActiveTouchedCardId((currentId) => {
+            if (currentId === product.id) {
+              return null;
+            }
+            return currentId;
+          });
+          touchTimeoutRef.current = null;
+        }, 2500);
+      }
+      return;
     }
 
-    // Only set the deactivation timer if the card is active
+    // Case B: The card is already active or is currently being set to active.
+    // Ensure the 2.5-second deactivation timer is scheduled.
     if (isTouchedRef.current || activeTouchedCardId === product.id) {
       if (touchTimeoutRef.current !== null) {
         window.clearTimeout(touchTimeoutRef.current);
       }
-      // Delay deactivation for 2.5 seconds (2500ms) so the user has time to view/click
+      // Delay deactivation for 2.5 seconds so the user has time to view/click
       touchTimeoutRef.current = window.setTimeout(() => {
         setActiveTouchedCardId((currentId) => {
           if (currentId === product.id) {
@@ -128,6 +155,7 @@ function ProductCard({
   };
 
   const handleTouchCancel = () => {
+    isFingerDownRef.current = false;
     touchStartYRef.current = null;
     touchStartXRef.current = null;
 
@@ -151,6 +179,29 @@ function ProductCard({
       }, 2500);
     }
   };
+
+  React.useEffect(() => {
+    if (isTouched) {
+      // If the card became active, and the user's finger is NOT down, and we don't already have a deactivation timer, schedule one!
+      if (!isFingerDownRef.current && touchTimeoutRef.current === null) {
+        touchTimeoutRef.current = window.setTimeout(() => {
+          setActiveTouchedCardId((currentId) => {
+            if (currentId === product.id) {
+              return null;
+            }
+            return currentId;
+          });
+          touchTimeoutRef.current = null;
+        }, 2500);
+      }
+    } else {
+      // If the card became inactive, clear any running deactivation timer
+      if (touchTimeoutRef.current !== null) {
+        window.clearTimeout(touchTimeoutRef.current);
+        touchTimeoutRef.current = null;
+      }
+    }
+  }, [isTouched, activeTouchedCardId]);
 
   React.useEffect(() => {
     return () => {
@@ -256,17 +307,40 @@ function ProductCard({
 
 export function ProductGrid() {
   const [activeTouchedCardId, setActiveTouchedCardId] = React.useState<string | null>(null);
+  const lastScrollYRef = React.useRef<number>(0);
+  const lastActiveTimeRef = React.useRef<number>(0);
 
-  // Global scroll listener to close any open popup immediately when the user scrolls the page
+  React.useEffect(() => {
+    if (activeTouchedCardId !== null) {
+      lastScrollYRef.current = window.scrollY;
+      lastActiveTimeRef.current = Date.now();
+    }
+  }, [activeTouchedCardId]);
+
+  // Global scroll listener to close any open popup immediately when the user scrolls the page intentionally
   React.useEffect(() => {
     const handleScroll = () => {
+      if (activeTouchedCardId === null) return;
+
+      // Ignore scroll events within 500ms of activation to prevent layout shift triggers
+      const timeElapsed = Date.now() - lastActiveTimeRef.current;
+      if (timeElapsed < 500) {
+        return;
+      }
+
+      // Ignore scrolls that are less than 20px (e.g. sub-pixel scroll adjustments or micro-shakes)
+      const scrollDiff = Math.abs(window.scrollY - lastScrollYRef.current);
+      if (scrollDiff < 20) {
+        return;
+      }
+
       setActiveTouchedCardId(null);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [activeTouchedCardId]);
 
   return (
     <section
