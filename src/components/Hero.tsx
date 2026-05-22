@@ -66,14 +66,14 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="w-full relative overflow-hidden bg-[#070708] md:bg-black flex flex-col-reverse md:flex-row h-[88vh] md:min-h-[80vh] md:h-[85vh]">
+    <section className="w-full relative overflow-hidden bg-[#070708] md:bg-black flex flex-col-reverse md:flex-row min-h-[90vh] md:min-h-[80vh] md:h-[85vh] h-auto">
       {/* Massive subtle ambient glow in the middle behind everything */}
       <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-950/5 rounded-full blur-[150px] pointer-events-none z-0" />
 
       {/* LEFT COLUMN: Text & Branding */}
       <div className="relative w-full flex-1 px-6 py-8 z-10 flex flex-col items-center justify-center text-center bg-[#070708] border-none md:border-t-0 md:relative md:top-0 md:left-0 md:translate-x-0 md:max-w-none md:w-1/2 md:items-start md:text-left md:pl-12 md:pr-6 md:py-24 md:backdrop-blur-none md:bg-slate-texture md:rounded-none md:min-h-0 md:max-w-none md:mx-0 md:flex-none">
-        {/* Luxury grid texture overlay on desktop and mobile */}
-        <div className="absolute inset-0 bg-india-grid pointer-events-none opacity-40 z-0" />
+        {/* Luxury grid texture overlay on desktop only */}
+        <div className="hidden md:block absolute inset-0 bg-india-grid pointer-events-none opacity-40 z-0" />
 
         {/* Soft edge blend to dissolve the boundary in the center */}
         <div className="hidden md:block absolute inset-y-0 right-0 w-1/4 bg-gradient-to-r from-transparent to-black z-0 pointer-events-none" />
@@ -105,7 +105,7 @@ export function Hero() {
       </div>
 
       {/* RIGHT COLUMN: Full-Image Slideshow */}
-      <div className="relative w-full h-[38vh] xs:h-[42vh] z-0 bg-[#070708] md:absolute md:inset-0 md:left-1/2 md:w-1/2 md:h-full md:min-h-full md:max-h-none md:min-h-0">
+      <div className="relative w-full h-[52vh] sm:h-[58vh] z-0 bg-[#070708] md:absolute md:inset-0 md:left-1/2 md:w-1/2 md:h-full md:min-h-full md:max-h-none md:min-h-0">
         {slides.map((slide, i) => (
           <img
             key={slide.src}
@@ -128,7 +128,7 @@ export function Hero() {
         <div className="hidden md:block absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black to-transparent z-20 pointer-events-none" />
 
         {/* Mobile-only gradient overlay to melt the image bottom into the text column background (#070708) */}
-        <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#070708] to-transparent z-[15] md:hidden pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#070708] via-[#070708]/90 via-[#070708]/40 to-transparent z-[15] md:hidden pointer-events-none" />
       </div>
     </section>
   );
