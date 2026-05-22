@@ -230,8 +230,8 @@ function ProductPage() {
             {/* Highlights pills */}
             <div className="flex flex-wrap gap-x-5 gap-y-2 mt-4 md:mt-6">
               {product.highlights.map((hl) => (
-                <div key={hl} className="flex items-center gap-1.5 shrink-0">
-                  <Sparkles className="h-3.5 w-3.5 text-amber-400/80 shrink-0" />
+                <div key={hl} className="flex items-center gap-2 shrink-0">
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500/50 shrink-0" />
                   <span className="text-[10.5px] sm:text-xs font-light uppercase tracking-[0.16em] text-zinc-300 whitespace-nowrap">
                     {hl}
                   </span>

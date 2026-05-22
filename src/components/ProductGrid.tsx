@@ -1,4 +1,4 @@
-import { ShoppingCart, Sparkles } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/lib/cart";
 import { products } from "@/data/products";
@@ -178,14 +178,14 @@ function ProductCard({
                 : "opacity-100 translate-y-0 pointer-events-auto"
             }`}
           >
-            <div className="flex flex-nowrap items-center gap-x-2 pt-2.5 overflow-hidden w-full">
+            <div className="flex flex-nowrap items-center gap-x-2.5 pt-2.5 overflow-hidden w-full">
               {product.highlights.slice(0, 2).map((h, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-0.5 shrink-0"
+                  className="flex items-center gap-1.5 shrink-0"
                 >
-                  <Sparkles className="h-2 w-2 text-amber-400/80 shrink-0" />
-                  <span className="text-[8px] sm:text-[9px] font-light uppercase tracking-[0.06em] text-zinc-300 whitespace-nowrap">
+                  <span className="h-1 w-1 rounded-full bg-amber-500/40 shrink-0" />
+                  <span className="text-[8.5px] sm:text-[9px] font-light uppercase tracking-[0.06em] text-zinc-300 whitespace-nowrap">
                     {h}
                   </span>
                 </div>
