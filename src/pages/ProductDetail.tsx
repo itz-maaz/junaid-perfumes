@@ -132,8 +132,8 @@ function ProductPage() {
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-16">
           {/* LEFT COLUMN: Zoomable Premium Image Container & Gallery Slides */}
-          <div className="md:col-span-6 flex flex-col items-center">
-            <div className="relative w-full h-56 xs:h-64 sm:h-72 md:h-auto md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-md shadow-2xl shadow-black/80 group flex items-center justify-center">
+          <div className="md:col-span-6 flex flex-col md:flex-row-reverse md:items-start gap-3 md:gap-4 items-center w-full">
+            <div className="relative w-full h-56 xs:h-64 sm:h-72 md:h-auto md:flex-1 md:aspect-[3/4] md:max-w-[420px] overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-md shadow-2xl shadow-black/80 group flex items-center justify-center">
               {/* Product Badge */}
               <span className="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-zinc-300 border border-white/10">
                 <Sparkles className="h-3 w-3 text-brand-green" />
@@ -156,7 +156,7 @@ function ProductPage() {
 
             {/* Premium Slide Navigation / Thumbnails */}
             {product.images && product.images.length > 1 && (
-              <div className="flex justify-center gap-3 mt-2.5 md:mt-4 w-full">
+              <div className="flex md:flex-col justify-center gap-3 mt-2.5 md:mt-0 w-full md:w-auto shrink-0">
                 {product.images.map((imgUrl, idx) => {
                   const isSelected = activeImageIndex === idx;
                   return (
@@ -202,7 +202,7 @@ function ProductPage() {
 
             {/* Dynamic Price */}
             <div className="flex items-baseline gap-3 mt-2 md:mt-4">
-              <span className="font-serif text-2xl sm:text-3xl text-zinc-100 font-semibold leading-none">
+              <span className="font-sans text-2xl sm:text-3xl text-white font-semibold tracking-tight leading-none">
                 {currentPrice}
               </span>
               <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-semibold">
