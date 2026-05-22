@@ -9,6 +9,9 @@ function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
   const { buyNow } = useCart();
   const [isTouched, setIsTouched] = React.useState(false);
+  const touchStartYRef = React.useRef<number | null>(null);
+  const touchStartXRef = React.useRef<number | null>(null);
+  const touchTimeoutRef = React.useRef<number | null>(null);
 
   const goToProduct = () => {
     navigate(`/product/${product.id}`);
@@ -27,11 +30,70 @@ function ProductCard({ product }: { product: Product }) {
     });
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (touchTimeoutRef.current !== null) {
+      window.clearTimeout(touchTimeoutRef.current);
+      touchTimeoutRef.current = null;
+    }
+    const touch = e.touches[0];
+    touchStartYRef.current = touch.clientY;
+    touchStartXRef.current = touch.clientX;
+    setIsTouched(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartYRef.current === null || touchStartXRef.current === null) return;
+    const touch = e.touches[0];
+    const diffY = Math.abs(touch.clientY - touchStartYRef.current);
+    const diffX = Math.abs(touch.clientX - touchStartXRef.current);
+
+    // If the finger moves more than 10 pixels, they are scrolling, so deactivate instantly
+    if (diffY > 10 || diffX > 10) {
+      setIsTouched(false);
+      touchStartYRef.current = null;
+      touchStartXRef.current = null;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartYRef.current = null;
+    touchStartXRef.current = null;
+    if (touchTimeoutRef.current !== null) {
+      window.clearTimeout(touchTimeoutRef.current);
+    }
+    // Delay deactivation so the BUY NOW click can process and then fade out elegantly
+    touchTimeoutRef.current = window.setTimeout(() => {
+      setIsTouched(false);
+      touchTimeoutRef.current = null;
+    }, 1500); // 1.5 seconds allows comfortable time to click and then fades away
+  };
+
+  const handleTouchCancel = () => {
+    touchStartYRef.current = null;
+    touchStartXRef.current = null;
+    if (touchTimeoutRef.current !== null) {
+      window.clearTimeout(touchTimeoutRef.current);
+    }
+    touchTimeoutRef.current = window.setTimeout(() => {
+      setIsTouched(false);
+      touchTimeoutRef.current = null;
+    }, 1500);
+  };
+
+  React.useEffect(() => {
+    return () => {
+      if (touchTimeoutRef.current !== null) {
+        window.clearTimeout(touchTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div
-      onTouchStart={() => setIsTouched(true)}
-      onTouchEnd={() => setIsTouched(false)}
-      onTouchCancel={() => setIsTouched(false)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
       className={`group relative flex flex-col overflow-hidden rounded-xl border bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-all duration-300 ease-out md:hover:-translate-y-2 md:hover:scale-[1.02] md:hover:border-white/15 md:hover:shadow-[0_12px_30px_rgba(0,0,0,0.5)] md:focus-within:-translate-y-2 md:focus-within:scale-[1.02] md:focus-within:border-white/15 md:focus-within:shadow-[0_12px_30px_rgba(0,0,0,0.5)] ${
         isTouched
           ? "-translate-y-2 scale-[1.02] border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.5)]"
