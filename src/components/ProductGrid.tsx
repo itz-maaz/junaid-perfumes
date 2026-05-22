@@ -26,7 +26,7 @@ function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-transform hover:-translate-y-0.5">
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-zinc-900/50 backdrop-blur-md shadow-lg shadow-black/30 transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-white/15 hover:shadow-[0_12px_30px_rgba(0,0,0,0.5)] active:-translate-y-2 active:scale-[1.02] active:border-white/15 active:shadow-[0_12px_30px_rgba(0,0,0,0.5)] focus-within:-translate-y-2 focus-within:scale-[1.02] focus-within:border-white/15 focus-within:shadow-[0_12px_30px_rgba(0,0,0,0.5)]">
       <button
         type="button"
         onClick={goToProduct}
@@ -37,7 +37,7 @@ function ProductCard({ product }: { product: Product }) {
           src={product.image}
           alt={product.name}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-active:scale-110"
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-active:scale-110 group-focus-within:scale-110"
         />
       </button>
 
@@ -55,14 +55,14 @@ function ProductCard({ product }: { product: Product }) {
           <p className="text-[10px] sm:text-xs text-zinc-400 truncate leading-snug">{product.notes}</p>
         </div>
 
-        <div className="relative flex h-9 w-full items-center justify-center sm:h-10">
-          <span className="text-xs sm:text-sm font-semibold text-amber-300 leading-none transition-opacity duration-300 group-hover:opacity-0 group-active:opacity-0">
+        <div className="relative flex h-10 w-full items-center justify-center overflow-hidden">
+          <span className="text-xs sm:text-sm font-semibold text-amber-300 leading-none transition-transform duration-300 ease-out group-hover:-translate-y-8 group-active:-translate-y-8 group-focus-within:-translate-y-8">
             {product.price}
           </span>
           <button
             type="button"
             onClick={handleBuyNow}
-            className="absolute inset-x-[4%] inset-y-0 z-10 inline-flex items-center justify-center gap-2 rounded-full bg-brand-green py-2 text-xs font-semibold uppercase tracking-wider text-brand-green-foreground shadow-lg shadow-brand-green/25 opacity-0 scale-95 transition-all duration-300 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto group-active:opacity-100 group-active:scale-100 group-active:pointer-events-auto"
+            className="absolute inset-x-0 bottom-0 z-10 inline-flex items-center justify-center gap-2 rounded-full bg-brand-green py-2 text-xs font-semibold uppercase tracking-wider text-brand-green-foreground shadow-lg shadow-brand-green/25 opacity-0 translate-y-4 transition-all duration-300 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 group-hover:pointer-events-auto group-active:opacity-100 group-active:scale-100 group-active:translate-y-0 group-active:pointer-events-auto group-focus-within:opacity-100 group-focus-within:scale-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto"
           >
             <ShoppingCart className="h-4 w-4 shrink-0" strokeWidth={2} />
             Buy Now

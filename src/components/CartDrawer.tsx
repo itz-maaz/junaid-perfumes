@@ -3,7 +3,7 @@ import { useCart } from "@/lib/cart";
 import { Trash2, ShoppingBag } from "lucide-react";
 
 export function CartDrawer() {
-  const { items, isOpen, setOpen, removeItem, total, count, clear, openCheckout } = useCart();
+  const { items, isOpen, setOpen, removeItem, updateQty, total, count, clear, openCheckout } = useCart();
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -38,26 +38,49 @@ export function CartDrawer() {
                   <img
                     src={it.image}
                     alt={it.name}
-                    className="h-20 w-16 rounded-md object-cover bg-zinc-800"
+                    className="h-20 w-16 rounded-md object-cover bg-zinc-800 shrink-0"
                   />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-serif text-base text-white truncate">{it.name}</h4>
                     <p className="text-[10px] text-zinc-400 truncate">{it.notes}</p>
-                    <div className="mt-2 flex items-center justify-between">
-                      <span className="text-sm font-semibold">
-                        {it.price}
-                        {it.qty > 1 && (
-                          <span className="ml-1 text-xs text-zinc-400">× {it.qty}</span>
-                        )}
+                    
+                    <div className="mt-3 flex items-center justify-between gap-2">
+                      <span className="text-sm font-semibold text-zinc-200">
+                        ₹ {(it.priceValue * it.qty).toLocaleString("en-IN")}
                       </span>
-                      <button
-                        onClick={() => removeItem(it.id)}
-                        aria-label={`Remove ${it.name}`}
-                        className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider text-zinc-300 hover:text-white hover:border-red-500/40 hover:bg-red-500/10 transition-colors cursor-pointer"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                        Remove
-                      </button>
+                      
+                      <div className="flex items-center gap-2">
+                        {/* Compact Qty Selector */}
+                        <div className="flex items-center bg-zinc-950 rounded-md border border-white/10 p-0.5">
+                          <button
+                            type="button"
+                            onClick={() => updateQty(it.id, it.qty - 1)}
+                            disabled={it.qty <= 1}
+                            className="w-5 h-5 flex items-center justify-center text-zinc-400 hover:text-white disabled:opacity-30 rounded text-xs transition-colors cursor-pointer"
+                          >
+                            −
+                          </button>
+                          <span className="w-5 text-center text-[10px] font-mono font-medium text-white">
+                            {it.qty}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => updateQty(it.id, it.qty + 1)}
+                            className="w-5 h-5 flex items-center justify-center text-zinc-400 hover:text-white rounded text-xs transition-colors cursor-pointer"
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        {/* Remove Trash Icon */}
+                        <button
+                          onClick={() => removeItem(it.id)}
+                          aria-label={`Remove ${it.name}`}
+                          className="p-1.5 rounded-md border border-white/10 bg-white/5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </li>

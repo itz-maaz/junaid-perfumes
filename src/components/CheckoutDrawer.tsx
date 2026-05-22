@@ -4,7 +4,7 @@ import { useCart } from "@/lib/cart";
 import { ShieldCheck, Lock } from "lucide-react";
 
 export function CheckoutDrawer() {
-  const { items, isCheckoutOpen, setCheckoutOpen, total, count, clear } = useCart();
+  const { items, isCheckoutOpen, setCheckoutOpen, removeItem, updateQty, total, count, clear } = useCart();
   const [form, setForm] = useState({ name: "", phone: "", address: "" });
 
   const handlePay = (e: React.FormEvent) => {
@@ -35,19 +35,50 @@ export function CheckoutDrawer() {
             <h3 className="text-[10px] uppercase tracking-[0.25em] text-zinc-400 mb-2">
               Order ({count})
             </h3>
-            <ul className="space-y-2 rounded-xl border border-white/5 bg-zinc-900/60 p-3">
+            <ul className="space-y-3 rounded-xl border border-white/5 bg-zinc-900/60 p-3">
               {items.map((it) => (
-                <li key={it.id} className="flex items-center justify-between gap-3 text-sm">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <img src={it.image} alt={it.name} className="h-10 w-8 rounded object-cover" />
-                    <div className="min-w-0">
-                      <p className="font-serif text-white truncate">{it.name}</p>
-                      <p className="text-[10px] text-zinc-500">Qty {it.qty}</p>
+                <li key={it.id} className="flex items-center justify-between gap-3 text-sm rounded-lg border border-white/5 bg-zinc-950/40 p-2.5">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <img src={it.image} alt={it.name} className="h-12 w-10 rounded object-cover shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-serif text-white truncate text-sm">{it.name}</p>
+                      
+                      {/* Compact Qty selector */}
+                      <div className="mt-1 flex items-center gap-1.5 bg-zinc-950 rounded-lg p-0.5 border border-white/10 w-fit">
+                        <button
+                          type="button"
+                          onClick={() => updateQty(it.id, it.qty - 1)}
+                          disabled={it.qty <= 1}
+                          className="w-5 h-5 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 disabled:opacity-30 disabled:pointer-events-none rounded text-xs transition-colors cursor-pointer"
+                        >
+                          −
+                        </button>
+                        <span className="w-5 text-center text-[11px] font-mono font-medium text-white">
+                          {it.qty}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => updateQty(it.id, it.qty + 1)}
+                          className="w-5 h-5 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded text-xs transition-colors cursor-pointer"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <span className="text-zinc-200 text-xs">
-                    ₹ {(it.priceValue * it.qty).toLocaleString("en-IN")}
-                  </span>
+                  
+                  <div className="flex flex-col items-end gap-1.5 shrink-0">
+                    <span className="text-zinc-200 text-xs font-semibold">
+                      ₹ {(it.priceValue * it.qty).toLocaleString("en-IN")}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeItem(it.id)}
+                      className="text-[10px] uppercase tracking-wider text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
