@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { 
   ChevronLeft, 
@@ -20,23 +20,7 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { CheckoutDrawer } from "@/components/CheckoutDrawer";
 import { products } from "@/data/products";
 
-export const Route = createFileRoute("/product/$id")({
-  component: ProductPageContainer,
-  head: ({ params }) => {
-    const product = products.find((p) => p.id === params.id);
-    return {
-      meta: [
-        { title: product ? `${product.name} — Luxury Fragrance | Junaid Perfumes` : "Product Not Found — Junaid Perfumes" },
-        {
-          name: "description",
-          content: product ? product.description : "Discover hand-crafted luxury perfumes shipped across India."
-        }
-      ]
-    };
-  }
-});
-
-function ProductPageContainer() {
+export function ProductDetail() {
   return (
     <CartProvider>
       <ProductPage />
@@ -70,7 +54,7 @@ const getProductImageProps = (imgUrl: string) => {
 };
 
 function ProductPage() {
-  const { id } = useParams({ from: "/product/$id" });
+  const { id } = useParams();
   const { addItem, buyNow } = useCart();
   
   const product = products.find((p) => p.id === id);

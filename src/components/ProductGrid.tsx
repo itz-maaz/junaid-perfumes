@@ -1,5 +1,5 @@
 import { ShoppingCart } from "lucide-react";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "@/lib/cart";
 import { products } from "@/data/products";
 import type { Product } from "@/data/products";
@@ -9,8 +9,9 @@ function ProductCard({ product }: { product: Product }) {
   const { buyNow } = useCart();
 
   const goToProduct = () => {
-    navigate({ to: "/product/$id", params: { id: product.id } });
+    navigate(`/product/${product.id}`);
   };
+
 
   const handleBuyNow = (e: React.MouseEvent) => {
     e.stopPropagation();
