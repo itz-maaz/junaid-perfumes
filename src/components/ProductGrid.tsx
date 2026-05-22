@@ -12,6 +12,7 @@ function ProductCard({ product }: { product: Product }) {
   const touchStartYRef = React.useRef<number | null>(null);
   const touchStartXRef = React.useRef<number | null>(null);
   const touchTimeoutRef = React.useRef<number | null>(null);
+  const touchStartTimeoutRef = React.useRef<number | null>(null);
 
   const goToProduct = () => {
     navigate(`/product/${product.id}`);
@@ -35,10 +36,20 @@ function ProductCard({ product }: { product: Product }) {
       window.clearTimeout(touchTimeoutRef.current);
       touchTimeoutRef.current = null;
     }
+    if (touchStartTimeoutRef.current !== null) {
+      window.clearTimeout(touchStartTimeoutRef.current);
+      touchStartTimeoutRef.current = null;
+    }
+
     const touch = e.touches[0];
     touchStartYRef.current = touch.clientY;
     touchStartXRef.current = touch.clientX;
-    setIsTouched(true);
+
+    // Delay the touch activation slightly to distinguish intentional holds from scroll swipes
+    touchStartTimeoutRef.current = window.setTimeout(() => {
+      setIsTouched(true);
+      touchStartTimeoutRef.current = null;
+    }, 180);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -49,6 +60,10 @@ function ProductCard({ product }: { product: Product }) {
 
     // If the finger moves more than 10 pixels, they are scrolling, so deactivate instantly
     if (diffY > 10 || diffX > 10) {
+      if (touchStartTimeoutRef.current !== null) {
+        window.clearTimeout(touchStartTimeoutRef.current);
+        touchStartTimeoutRef.current = null;
+      }
       setIsTouched(false);
       touchStartYRef.current = null;
       touchStartXRef.current = null;
@@ -58,6 +73,12 @@ function ProductCard({ product }: { product: Product }) {
   const handleTouchEnd = () => {
     touchStartYRef.current = null;
     touchStartXRef.current = null;
+
+    if (touchStartTimeoutRef.current !== null) {
+      window.clearTimeout(touchStartTimeoutRef.current);
+      touchStartTimeoutRef.current = null;
+    }
+
     if (touchTimeoutRef.current !== null) {
       window.clearTimeout(touchTimeoutRef.current);
     }
@@ -71,6 +92,12 @@ function ProductCard({ product }: { product: Product }) {
   const handleTouchCancel = () => {
     touchStartYRef.current = null;
     touchStartXRef.current = null;
+
+    if (touchStartTimeoutRef.current !== null) {
+      window.clearTimeout(touchStartTimeoutRef.current);
+      touchStartTimeoutRef.current = null;
+    }
+
     if (touchTimeoutRef.current !== null) {
       window.clearTimeout(touchTimeoutRef.current);
     }
@@ -84,6 +111,9 @@ function ProductCard({ product }: { product: Product }) {
     return () => {
       if (touchTimeoutRef.current !== null) {
         window.clearTimeout(touchTimeoutRef.current);
+      }
+      if (touchStartTimeoutRef.current !== null) {
+        window.clearTimeout(touchStartTimeoutRef.current);
       }
     };
   }, []);
@@ -150,8 +180,8 @@ function ProductCard({ product }: { product: Product }) {
           </div>
 
           <span
-            className={`absolute font-semibold text-brand-green transition-all duration-300 ease-out text-xs sm:text-sm md:group-hover:bottom-[48px] md:group-hover:left-1/2 md:group-hover:-translate-x-1/2 md:group-focus-within:bottom-[48px] md:group-focus-within:left-1/2 md:group-focus-within:-translate-x-1/2 ${
-              isTouched ? "bottom-[48px] left-1/2 -translate-x-1/2" : "bottom-2 left-0 translate-x-0"
+            className={`absolute font-semibold text-brand-green transition-all duration-300 ease-out text-xs sm:text-sm md:group-hover:bottom-[40px] md:group-hover:left-1/2 md:group-hover:-translate-x-1/2 md:group-focus-within:bottom-[40px] md:group-focus-within:left-1/2 md:group-focus-within:-translate-x-1/2 ${
+              isTouched ? "bottom-[40px] left-1/2 -translate-x-1/2" : "bottom-2 left-0 translate-x-0"
             }`}
           >
             {product.price}
