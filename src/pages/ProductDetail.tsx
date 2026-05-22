@@ -5,7 +5,6 @@ import {
   ShoppingBag,
   ShoppingCart,
   Sparkles, 
-  Droplet, 
   Flame, 
   ShieldCheck,
   Info, 
@@ -28,31 +27,6 @@ export function ProductDetail() {
   );
 }
 
-const getProductImageProps = (imgUrl: string) => {
-  if (imgUrl.includes("?crop=cap")) {
-    return {
-      src: imgUrl.split("?")[0],
-      style: {
-        transform: "scale(1.75)",
-        transformOrigin: "50% 15%"
-      }
-    };
-  }
-  if (imgUrl.includes("?crop=label")) {
-    return {
-      src: imgUrl.split("?")[0],
-      style: {
-        transform: "scale(1.75)",
-        transformOrigin: "50% 50%"
-      }
-    };
-  }
-  return {
-    src: imgUrl,
-    style: {}
-  };
-};
-
 function ProductPage() {
   const { id } = useParams();
   const { addItem, buyNow } = useCart();
@@ -63,13 +37,6 @@ function ProductPage() {
   const [selectedSize, setSelectedSize] = useState("50ml");
   const [activeAccordion, setActiveAccordion] = useState<string | null>("pyramid");
   const [isAdded, setIsAdded] = useState(false);
-  const [activeImage, setActiveImage] = useState(product?.image || "");
-
-  useEffect(() => {
-    if (product) {
-      setActiveImage(product.image);
-    }
-  }, [id, product]);
 
   useEffect(() => {
     if (!product || typeof window === "undefined" || window.location.hash !== "#buy-now") return;
@@ -110,7 +77,6 @@ function ProductPage() {
   // Calculate prices based on size
   const is100ml = selectedSize === "100ml";
   const currentPrice = is100ml ? `₹ ${product.priceValue100ml.toLocaleString("en-IN")}` : product.price;
-  const currentPriceValue = is100ml ? product.priceValue100ml : product.priceValue;
 
   const cartItemForSize = (size: string) => {
     const is100 = size === "100ml";
@@ -161,80 +127,25 @@ function ProductPage() {
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
           
-          {/* LEFT COLUMN: Interactive Multi-Angle Gallery */}
-          <div className="md:col-span-6 flex flex-col md:flex-row gap-4 w-full items-start">
-            
-            {/* Desktop Side Panel / Thumbnails (hidden on mobile, visible on md+) */}
-            <div className="hidden md:flex flex-col gap-3 shrink-0">
-              {(product.images || [product.image]).map((imgUrl, idx) => {
-                const isActive = activeImage === imgUrl;
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveImage(imgUrl)}
-                    onMouseEnter={() => setActiveImage(imgUrl)}
-                    className={`relative w-[72px] aspect-[4/5] overflow-hidden rounded-xl border transition-all duration-300 cursor-pointer ${
-                      isActive
-                        ? "border-brand-green bg-brand-green/10 scale-[1.05] shadow-lg shadow-brand-green/20"
-                        : "border-white/5 bg-zinc-900/40 hover:border-white/20 hover:scale-[1.03] active:scale-[0.97]"
-                    }`}
-                  >
-                    <img
-                      {...getProductImageProps(imgUrl)}
-                      alt={`${product.name} thumbnail ${idx + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-300"
-                    />
-                  </button>
-                );
-              })}
+          {/* LEFT COLUMN: Zoomable Premium Image Container */}
+          <div className="md:col-span-6 flex justify-center">
+            <div className="relative w-full aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-md shadow-2xl shadow-black/80 group">
+              
+              {/* Product Badge */}
+              <span className="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-zinc-300 border border-white/10">
+                <Sparkles className="h-3 w-3 text-brand-green" />
+                Artisanal Batch
+              </span>
+
+              <img
+                src={product.image}
+                alt={product.name}
+                className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 group-hover:brightness-[1.03]"
+              />
+              
+              {/* Elegant shadow gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-70 pointer-events-none" />
             </div>
-
-            {/* Main Image Showcase */}
-            <div className="flex-1 w-full flex flex-col gap-4">
-              <div className="relative w-full aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-md shadow-2xl shadow-black/80 group">
-                
-                {/* Product Badge */}
-                <span className="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-zinc-300 border border-white/10">
-                  <Sparkles className="h-3 w-3 text-brand-green" />
-                  Artisanal Batch
-                </span>
-
-                <img
-                  key={activeImage}
-                  {...getProductImageProps(activeImage)}
-                  alt={product.name}
-                  className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 group-hover:brightness-[1.03] animate-gallery-fade"
-                />
-                
-                {/* Elegant shadow gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-70 pointer-events-none" />
-              </div>
-
-              {/* Mobile Horizontal Carousel / Thumbnails (visible on mobile, hidden on md+) */}
-              <div className="flex md:hidden flex-row gap-3 overflow-x-auto py-1 scrollbar-none w-full justify-center">
-                {(product.images || [product.image]).map((imgUrl, idx) => {
-                  const isActive = activeImage === imgUrl;
-                  return (
-                    <button
-                      key={idx}
-                      onClick={() => setActiveImage(imgUrl)}
-                      className={`relative w-[64px] aspect-[4/5] shrink-0 overflow-hidden rounded-xl border transition-all duration-300 cursor-pointer ${
-                        isActive
-                          ? "border-brand-green bg-brand-green/10 scale-[1.05] shadow-lg shadow-brand-green/20"
-                          : "border-white/5 bg-zinc-900/40 active:scale-[0.95]"
-                      }`}
-                    >
-                      <img
-                        {...getProductImageProps(imgUrl)}
-                        alt={`${product.name} mobile thumbnail ${idx + 1}`}
-                        className="h-full w-full object-cover transition-transform duration-300"
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
           </div>
 
           {/* RIGHT COLUMN: Product Information & Interactive Controls */}

@@ -3,7 +3,7 @@ import { useCart } from "@/lib/cart";
 import { Trash2, ShoppingBag } from "lucide-react";
 
 export function CartDrawer() {
-  const { items, isOpen, setOpen, removeItem, updateQty, total, count, clear, openCheckout } = useCart();
+  const { items, isOpen, setOpen, removeItem, total, count, clear, openCheckout } = useCart();
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -43,39 +43,21 @@ export function CartDrawer() {
                   <div className="flex-1 min-w-0">
                     <h4 className="font-serif text-base text-white truncate">{it.name}</h4>
                     <p className="text-[10px] text-zinc-400 truncate">{it.notes}</p>
-                    <div className="mt-3 flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1 bg-zinc-950 rounded-lg p-0.5 border border-white/10">
-                        <button
-                          type="button"
-                          onClick={() => updateQty(it.id, it.qty - 1)}
-                          disabled={it.qty <= 1}
-                          className="w-6 h-6 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 disabled:opacity-30 disabled:pointer-events-none rounded text-sm transition-colors cursor-pointer"
-                        >
-                          −
-                        </button>
-                        <span className="w-6 text-center text-xs font-mono font-medium text-white">
-                          {it.qty}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => updateQty(it.id, it.qty + 1)}
-                          className="w-6 h-6 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 rounded text-sm transition-colors cursor-pointer"
-                        >
-                          +
-                        </button>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-zinc-200">
-                          ₹ {(it.priceValue * it.qty).toLocaleString("en-IN")}
-                        </span>
-                        <button
-                          onClick={() => removeItem(it.id)}
-                          aria-label={`Remove ${it.name}`}
-                          className="p-1.5 rounded-lg border border-white/10 bg-white/5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all cursor-pointer"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
+                    <div className="mt-2 flex items-center justify-between">
+                      <span className="text-sm font-semibold">
+                        {it.price}
+                        {it.qty > 1 && (
+                          <span className="ml-1 text-xs text-zinc-400">× {it.qty}</span>
+                        )}
+                      </span>
+                      <button
+                        onClick={() => removeItem(it.id)}
+                        aria-label={`Remove ${it.name}`}
+                        className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider text-zinc-300 hover:text-white hover:border-red-500/40 hover:bg-red-500/10 transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                        Remove
+                      </button>
                     </div>
                   </div>
                 </li>
@@ -92,12 +74,12 @@ export function CartDrawer() {
                 ₹ {total.toLocaleString("en-IN")}
               </span>
             </div>
-            <button onClick={openCheckout} className="w-full rounded-full bg-brand-green py-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-green-foreground shadow-lg shadow-brand-green/20 transition active:scale-[0.98]">
+            <button onClick={openCheckout} className="w-full rounded-full bg-brand-green py-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-green-foreground shadow-lg shadow-brand-green/20 transition active:scale-[0.98] cursor-pointer">
               Secure Checkout
             </button>
             <button
               onClick={clear}
-              className="w-full rounded-full border border-white/10 bg-white/5 py-2 text-[11px] uppercase tracking-[0.25em] text-zinc-400 hover:text-white transition"
+              className="w-full rounded-full border border-white/10 bg-white/5 py-2 text-[11px] uppercase tracking-[0.25em] text-zinc-400 hover:text-white transition cursor-pointer"
             >
               Clear cart
             </button>
