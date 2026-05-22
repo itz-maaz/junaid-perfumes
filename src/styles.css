@@ -116,3 +116,43 @@
   animation: galleryFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@media (hover: hover) {
+  .product-hover-effect:hover,
+  .product-hover-effect:focus-within {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+  }
+  .product-hover-effect:hover img,
+  .product-hover-effect:focus-within img {
+    transform: scale(1.1) !important;
+  }
+  .product-hover-effect:hover .product-highlights,
+  .product-hover-effect:focus-within .product-highlights {
+    opacity: 0 !important;
+    transform: translateY(-8px) !important;
+    pointer-events: none !important;
+  }
+  .product-hover-effect:hover .product-price,
+  .product-hover-effect:focus-within .product-price {
+    bottom: 40px !important;
+    left: 4% !important;
+  }
+  @media (min-width: 640px) {
+    .product-hover-effect:hover .product-price,
+    .product-hover-effect:focus-within .product-price {
+      bottom: 44px !important;
+    }
+  }
+  .product-hover-effect:hover .buy-now-btn,
+  .product-hover-effect:focus-within .buy-now-btn {
+    opacity: 1 !important;
+    transform: scale(1) translateY(0) !important;
+    pointer-events: auto !important;
+  }
+  .product-hover-effect:hover .buy-now-btn svg,
+  .product-hover-effect:focus-within .buy-now-btn svg {
+    transform: scale(1.1) translateY(-2px) !important;
+  }
+}
+
