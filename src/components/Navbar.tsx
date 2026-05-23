@@ -54,11 +54,13 @@ export function Navbar() {
         
         {/* LEFT COLUMN: Brand & Logo */}
         <a href="/" className="flex items-center gap-3 justify-self-start hover:opacity-90 transition-opacity">
-          <img
-            src={brandLogo}
-            alt="Junaid Perfumes Logo"
-            className="h-10 w-10 rounded-full object-cover border border-zinc-800 shadow-sm"
-          />
+          <div className="h-10 w-10 rounded-full overflow-hidden border border-zinc-800 shadow-sm flex items-center justify-center shrink-0">
+            <img
+              src={brandLogo}
+              alt="Junaid Perfumes Logo"
+              className="w-full h-full object-cover scale-[1.3]"
+            />
+          </div>
           <div className="flex flex-col text-left">
             <span className="font-serif text-[13px] sm:text-[14px] tracking-[0.25em] text-zinc-100 uppercase font-semibold leading-none">
               Junaid
@@ -123,11 +125,13 @@ export function Navbar() {
             >
               <SheetHeader className="border-b border-white/10 pb-4 text-left">
                 <SheetTitle className="font-serif text-xl text-white flex items-center gap-2">
-                  <img
-                    src={brandLogo}
-                    alt="Junaid Perfumes Logo"
-                    className="h-8 w-8 rounded-full object-cover border border-zinc-800"
-                  />
+                  <div className="h-8 w-8 rounded-full overflow-hidden border border-zinc-800 flex items-center justify-center shrink-0">
+                    <img
+                      src={brandLogo}
+                      alt="Junaid Perfumes Logo"
+                      className="w-full h-full object-cover scale-[1.3]"
+                    />
+                  </div>
                   <div className="flex flex-col text-left">
                     <span className="font-serif text-[11px] tracking-[0.2em] text-zinc-100 uppercase font-semibold leading-none">
                       Junaid
@@ -182,7 +186,7 @@ export function Navbar() {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
             <input
               type="text"
-              placeholder="Search by name, notes (e.g. saffron, vanilla)..."
+              placeholder="Search by name, notes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-zinc-900/60 border border-zinc-800 focus:border-brand-green focus:ring-1 focus:ring-brand-green/30 rounded-xl pl-10 pr-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none transition-all duration-300"
