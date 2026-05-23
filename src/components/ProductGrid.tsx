@@ -18,8 +18,6 @@ function ProductCard({
   const navigate = useNavigate();
   const { addItem } = useCart();
   const isTouched = activeTouchedCardId === product.id;
-  const originalPrice = Math.round((product.priceValue * 1.25) / 100) * 100 - 1;
-  const discountPercent = Math.round(((originalPrice - product.priceValue) / originalPrice) * 100);
   const isTouchedRef = React.useRef(isTouched);
   React.useEffect(() => {
     isTouchedRef.current = isTouched;
@@ -187,19 +185,9 @@ function ProductCard({
                 {product.name}
               </h3>
             </button>
-            <div className="flex flex-col items-end shrink-0 leading-normal select-none">
-              <span className="font-semibold text-brand-green text-xs sm:text-sm whitespace-nowrap">
-                {product.price}
-              </span>
-              <div className="flex items-center gap-1 mt-0.5">
-                <span className="font-sans text-[8.5px] sm:text-[9.5px] text-zinc-500 line-through">
-                  ₹{originalPrice.toLocaleString("en-IN")}
-                </span>
-                <span className="text-[7.5px] sm:text-[8.5px] font-bold text-brand-green">
-                  -{discountPercent}%
-                </span>
-              </div>
-            </div>
+            <span className="font-semibold text-brand-green text-xs sm:text-sm whitespace-nowrap shrink-0 mt-0.5">
+              {product.price}
+            </span>
           </div>
           <p className="text-[10px] sm:text-xs text-zinc-400 truncate leading-snug">
             {product.notes}
@@ -218,34 +206,32 @@ function ProductCard({
           ))}
         </div>
 
-        {/* Add to Cart Button Slot (Below, in footer card where BUY NOW was before) */}
-        <div className="relative w-full h-8 mt-1.5 overflow-hidden">
-          <button
-            type="button"
-            onClick={handleAddToCartSilently}
-            className={`absolute inset-x-0 bottom-0 z-10 flex items-center justify-center gap-2 rounded-full py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ease-out cursor-pointer hover:scale-[1.02] active:scale-[0.98] md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:pointer-events-auto md:group-focus-within:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:pointer-events-auto ${
-              isTouched
-                ? "opacity-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 translate-y-3 pointer-events-none"
-            } ${
-              isAdded
-                ? "bg-emerald-600 text-white border border-emerald-500/30 shadow-lg shadow-emerald-600/25"
-                : "bg-sky-600 hover:bg-sky-500 text-white border border-sky-500/30 shadow-lg shadow-sky-600/25"
-            }`}
-          >
-            {isAdded ? (
-              <>
-                <Check className="h-3 w-3 shrink-0 animate-bounce" strokeWidth={3} />
-                ADDED TO CART
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="h-3 w-3 shrink-0" strokeWidth={2.5} />
-                ADD TO CART
-              </>
-            )}
-          </button>
-        </div>
+        {/* Add to Cart Button (Absolute overlay over highlights/bottom on hover) */}
+        <button
+          type="button"
+          onClick={handleAddToCartSilently}
+          className={`absolute inset-x-2.5 bottom-3 sm:bottom-3.5 z-20 flex items-center justify-center gap-2 rounded-full py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ease-out cursor-pointer hover:scale-[1.02] active:scale-[0.98] md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:pointer-events-auto md:group-focus-within:opacity-100 md:group-focus-within:translate-y-0 md:group-focus-within:pointer-events-auto ${
+            isTouched
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 translate-y-3 pointer-events-none"
+          } ${
+            isAdded
+              ? "bg-emerald-600 text-white border border-emerald-500/30 shadow-lg shadow-emerald-600/25"
+              : "bg-sky-600 hover:bg-sky-500 text-white border border-sky-500/30 shadow-lg shadow-sky-600/25"
+          }`}
+        >
+          {isAdded ? (
+            <>
+              <Check className="h-3 w-3 shrink-0 animate-bounce" strokeWidth={3} />
+              ADDED TO CART
+            </>
+          ) : (
+            <>
+              <ShoppingBag className="h-3 w-3 shrink-0" strokeWidth={2.5} />
+              ADD TO CART
+            </>
+          )}
+        </button>
       </div>
     </div>
   );

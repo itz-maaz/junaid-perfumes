@@ -117,10 +117,6 @@ function ProductPage() {
     ? `₹ ${product.priceValue100ml.toLocaleString("en-IN")}`
     : product.price;
 
-  const currentPriceValue = is100ml ? product.priceValue100ml : product.priceValue;
-  const originalPrice = Math.round((currentPriceValue * 1.25) / 100) * 100 - 1;
-  const discountPercent = Math.round(((originalPrice - currentPriceValue) / originalPrice) * 100);
-
   const cartItemForSize = (size: string) => {
     const is100 = size === "100ml";
     return {
@@ -287,25 +283,14 @@ function ProductPage() {
               {product.notes}
             </p>
 
-            {/* Dynamic Price & Discounts */}
-            <div className="flex flex-wrap items-center gap-3.5 mt-2 md:mt-4">
-              <div className="flex items-baseline gap-2">
-                <span className="font-sans text-2xl sm:text-3xl text-white font-semibold tracking-tight leading-none">
-                  {currentPrice}
-                </span>
-                <span className="font-sans text-sm sm:text-base text-zinc-500 line-through tracking-tight leading-none ml-1 select-none">
-                  ₹{originalPrice.toLocaleString("en-IN")}
-                </span>
-              </div>
-              
-              <div className="flex items-center gap-2 select-none">
-                <span className="inline-flex items-center gap-1 rounded bg-brand-green/10 border border-brand-green/20 px-2 py-0.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-brand-green shadow-sm">
-                  {discountPercent}% OFF
-                </span>
-                <span className="text-[9px] uppercase tracking-widest text-zinc-500 font-semibold">
-                  Incl. All Taxes
-                </span>
-              </div>
+            {/* Dynamic Price */}
+            <div className="flex items-baseline gap-3 mt-2 md:mt-4">
+              <span className="font-sans text-2xl sm:text-3xl text-white font-semibold tracking-tight leading-none">
+                {currentPrice}
+              </span>
+              <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-semibold">
+                Incl. All Taxes
+              </span>
             </div>
 
             {/* Divider */}
