@@ -68,7 +68,7 @@ export const products: Product[] = [
   {
     id: "royal-oud",
     name: "Royal Oud",
-    notes: "Oud · Saffron · Amber",
+    notes: "Oud · Saffron",
     price: "₹ 2,499",
     priceValue: 2499,
     priceValue100ml: 3699,
@@ -85,7 +85,7 @@ export const products: Product[] = [
   {
     id: "midnight-musk",
     name: "Midnight Musk",
-    notes: "Musk · Leather · Vetiver",
+    notes: "Musk · Leather",
     price: "₹ 2,199",
     priceValue: 2199,
     priceValue100ml: 3399,
@@ -102,7 +102,7 @@ export const products: Product[] = [
   {
     id: "smoky-vanilla",
     name: "Smoky Vanilla",
-    notes: "Vanilla · Tobacco · Cedar",
+    notes: "Vanilla · Tobacco",
     price: "₹ 1,899",
     priceValue: 1899,
     priceValue100ml: 3099,
@@ -119,7 +119,7 @@ export const products: Product[] = [
   {
     id: "ocean-breeze",
     name: "Ocean Breeze",
-    notes: "Bergamot · Salt · Iris",
+    notes: "Bergamot · Salt",
     price: "₹ 1,799",
     priceValue: 1799,
     priceValue100ml: 2999,
@@ -136,7 +136,7 @@ export const products: Product[] = [
   {
     id: "amber-noir",
     name: "Amber Noir",
-    notes: "Amber · Patchouli · Resin",
+    notes: "Amber · Patchouli",
     price: "₹ 2,699",
     priceValue: 2699,
     priceValue100ml: 3899,
@@ -153,7 +153,7 @@ export const products: Product[] = [
   {
     id: "saffron-rouge",
     name: "Saffron Rouge",
-    notes: "Saffron · Rose · Oud",
+    notes: "Saffron · Rose",
     price: "₹ 2,899",
     priceValue: 2899,
     priceValue100ml: 4099,
@@ -170,7 +170,7 @@ export const products: Product[] = [
   {
     id: "desert-rose",
     name: "Desert Rose",
-    notes: "Rose · Pink Pepper · Musk",
+    notes: "Rose · Pink Pepper",
     price: "₹ 2,399",
     priceValue: 2399,
     priceValue100ml: 3599,
@@ -187,7 +187,7 @@ export const products: Product[] = [
   {
     id: "velvet-oud",
     name: "Velvet Oud",
-    notes: "Oud · Velvet · Sandalwood",
+    notes: "Oud · Velvet",
     price: "₹ 3,199",
     priceValue: 3199,
     priceValue100ml: 4399,
@@ -204,7 +204,7 @@ export const products: Product[] = [
   {
     id: "oud-imperial",
     name: "Oud Imperial",
-    notes: "Imperial Oud · Leather · Frankincense",
+    notes: "Imperial Oud · Leather",
     price: "₹ 3,499",
     priceValue: 3499,
     priceValue100ml: 4699,
@@ -221,7 +221,7 @@ export const products: Product[] = [
   {
     id: "velvet-rose",
     name: "Velvet Rose",
-    notes: "Velvet Rose · Damask Rose · Praline",
+    notes: "Velvet Rose · Damask Rose",
     price: "₹ 2,599",
     priceValue: 2599,
     priceValue100ml: 3799,
@@ -238,7 +238,7 @@ export const products: Product[] = [
   {
     id: "santal-luxe",
     name: "Santal Luxe",
-    notes: "Sandalwood · Cardamom · Papyrus",
+    notes: "Sandalwood · Cardamom",
     price: "₹ 2,999",
     priceValue: 2999,
     priceValue100ml: 4199,
@@ -255,7 +255,7 @@ export const products: Product[] = [
   {
     id: "citrus-breeze",
     name: "Citrus Breeze",
-    notes: "Neroli · Bergamot · Sicilian Lemon",
+    notes: "Neroli · Bergamot",
     price: "₹ 1,999",
     priceValue: 1999,
     priceValue100ml: 3199,
