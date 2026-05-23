@@ -179,7 +179,9 @@ function ProductCard({
 
       <div className="flex flex-col gap-1.5 px-2.5 py-3 pb-3.5 sm:pb-4">
         <div className="space-y-0.5">
-          <div className="flex justify-between items-start gap-2">
+          <div className={`flex justify-between items-start gap-2 transition-transform duration-300 ease-out ${
+            isTouched ? "-translate-y-1" : "md:group-hover:-translate-y-1"
+          }`}>
             <button type="button" onClick={goToProduct} className="text-left cursor-pointer min-w-0 flex-1">
               <h3 className="font-serif text-sm sm:text-base leading-tight text-white truncate hover:text-brand-green transition-colors">
                 {product.name}
@@ -189,17 +191,21 @@ function ProductCard({
               {product.price}
             </span>
           </div>
-          <p className="text-[10px] sm:text-xs text-zinc-400 truncate leading-snug">
+          <p className={`text-[10px] sm:text-xs text-zinc-400 truncate leading-snug transition-transform duration-300 ease-out ${
+            isTouched ? "-translate-y-2 sm:-translate-y-2.5" : "md:group-hover:-translate-y-2 md:group-hover:sm:-translate-y-2.5"
+          }`}>
             {product.notes}
           </p>
         </div>
 
         {/* Highlights Row (always visible, in normal flow below description) */}
-        <div className="flex flex-nowrap items-center gap-x-1.5 overflow-hidden w-full mt-0.5">
+        <div className={`flex flex-nowrap items-center gap-x-1.5 overflow-hidden w-full mt-0.5 transition-transform duration-300 ease-out ${
+          isTouched ? "-translate-y-8 sm:-translate-y-[34px]" : "md:group-hover:-translate-y-8 md:group-hover:sm:-translate-y-[34px]"
+        }`}>
           {product.highlights.slice(0, 2).map((h, i) => (
             <span
               key={i}
-              className="inline-flex items-center text-[7px] xs:text-[7.5px] sm:text-[8px] font-semibold uppercase tracking-[0.08em] text-zinc-300 bg-white/5 border border-white/10 rounded px-1 py-0.5 xs:px-1.5 whitespace-nowrap shrink-0"
+              className="inline-flex items-center text-[7px] xs:text-[7.5px] sm:text-[8px] font-semibold uppercase tracking-[0.08em] text-zinc-300 bg-white/5 border border-white/10 rounded px-1.5 py-0.5 whitespace-nowrap shrink-0"
             >
               {h}
             </span>
