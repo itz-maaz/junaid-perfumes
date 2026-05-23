@@ -18,6 +18,8 @@ function ProductCard({
   const navigate = useNavigate();
   const { addItem } = useCart();
   const isTouched = activeTouchedCardId === product.id;
+  const originalPrice = Math.round((product.priceValue * 1.25) / 100) * 100 - 1;
+  const discountPercent = Math.round(((originalPrice - product.priceValue) / originalPrice) * 100);
   const isTouchedRef = React.useRef(isTouched);
   React.useEffect(() => {
     isTouchedRef.current = isTouched;
@@ -185,9 +187,19 @@ function ProductCard({
                 {product.name}
               </h3>
             </button>
-            <span className="font-semibold text-brand-green text-xs sm:text-sm whitespace-nowrap shrink-0 mt-0.5">
-              {product.price}
-            </span>
+            <div className="flex flex-col items-end shrink-0 leading-normal select-none">
+              <span className="font-semibold text-brand-green text-xs sm:text-sm whitespace-nowrap">
+                {product.price}
+              </span>
+              <div className="flex items-center gap-1 mt-0.5">
+                <span className="font-sans text-[8.5px] sm:text-[9.5px] text-zinc-500 line-through">
+                  ₹{originalPrice.toLocaleString("en-IN")}
+                </span>
+                <span className="text-[7.5px] sm:text-[8.5px] font-bold text-brand-green">
+                  -{discountPercent}%
+                </span>
+              </div>
+            </div>
           </div>
           <p className="text-[10px] sm:text-xs text-zinc-400 truncate leading-snug">
             {product.notes}
