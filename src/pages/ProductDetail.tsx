@@ -1,7 +1,8 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useRef } from "react";
 import {
   ChevronLeft,
+  ChevronRight,
   ShoppingBag,
   ShoppingCart,
   Sparkles,
@@ -14,17 +15,14 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { CartProvider, useCart } from "@/lib/cart";
+import { useCart } from "@/lib/cart";
 import { CartDrawer } from "@/components/CartDrawer";
 import { CheckoutDrawer } from "@/components/CheckoutDrawer";
 import { products } from "@/data/products";
+import { toast } from "sonner";
 
 export function ProductDetail() {
-  return (
-    <CartProvider>
-      <ProductPage />
-    </CartProvider>
-  );
+  return <ProductPage />;
 }
 
 function ProductPage() {
@@ -38,6 +36,31 @@ function ProductPage() {
   const [activeAccordion, setActiveAccordion] = useState<string | null>("pyramid");
   const [isAdded, setIsAdded] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const width = container.clientWidth;
+      const targetScroll = container.scrollLeft - width;
+      container.scrollTo({
+        left: targetScroll,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const width = container.clientWidth;
+      const targetScroll = container.scrollLeft + width;
+      container.scrollTo({
+        left: targetScroll,
+        behavior: "smooth",
+      });
+    }
+  };
 
   useEffect(() => {
     setActiveImageIndex(0);
@@ -109,6 +132,10 @@ function ProductPage() {
   const handleAddToCart = () => {
     addItem(cartItemForSize(selectedSize));
     setIsAdded(true);
+    toast.success("Item added to cart", {
+      description: `${product.name} (${selectedSize}) has been added successfully.`,
+      duration: 2500,
+    });
     setTimeout(() => setIsAdded(false), 2000);
   };
 
@@ -141,59 +168,106 @@ function ProductPage() {
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-16">
           {/* LEFT COLUMN: Zoomable Premium Image Container & Gallery Slides */}
-          <div className="md:col-span-6 flex flex-col md:flex-row-reverse md:items-start gap-3 md:gap-4 items-center w-full">
-            <div className="relative w-full h-56 xs:h-64 sm:h-72 md:h-auto md:flex-1 md:aspect-[3/4] md:max-w-[420px] overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-md shadow-2xl shadow-black/80 group flex items-center justify-center">
+          <div className="md:col-span-6 w-full flex items-start justify-center">
+            
+            {/* Unified premium image carousel (Amazon-style) */}
+            <div className="relative w-[82%] sm:w-full max-w-[320px] sm:max-w-[420px] aspect-[3/4] overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-md shadow-2xl shadow-black/80 flex items-center justify-center group/carousel">
               {/* Product Badge */}
               <span className="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-zinc-300 border border-white/10">
                 <Sparkles className="h-3 w-3 text-brand-green" />
                 Artisanal Batch
               </span>
 
-              <img
-                src={
-                  product.images && product.images[activeImageIndex]
-                    ? product.images[activeImageIndex]
-                    : product.image
-                }
-                alt={`${product.name} - View ${activeImageIndex + 1}`}
-                className="h-full w-full object-contain md:object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-[1.03]"
-              />
+              {/* Horizontal Scroll Snap Container */}
+              <div
+                ref={scrollContainerRef}
+                onScroll={(e) => {
+                  const scrollLeft = e.currentTarget.scrollLeft;
+                  const width = e.currentTarget.clientWidth;
+                  if (width > 0) {
+                    const newIndex = Math.round(scrollLeft / width);
+                    if (newIndex !== activeImageIndex) {
+                      setActiveImageIndex(newIndex);
+                    }
+                  }
+                }}
+                className="flex w-full h-full overflow-x-auto snap-x snap-mandatory touch-pan-x scroll-smooth"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {product.images && product.images.map((imgUrl, idx) => (
+                  <div key={idx} className="w-full h-full flex-shrink-0 snap-center flex items-center justify-center">
+                    <img
+                      src={imgUrl}
+                      alt={`${product.name} - View ${idx + 1}`}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
 
-              {/* Elegant shadow gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-70 pointer-events-none" />
-            </div>
+              {/* Left & Right navigation buttons for both mobile and desktop */}
+              {product.images && product.images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      scrollLeft();
+                    }}
+                    className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-black/50 hover:bg-black/75 active:bg-black/90 text-white border border-white/10 backdrop-blur-sm transition-all duration-300 opacity-70 md:opacity-0 md:group-hover/carousel:opacity-100 focus:opacity-100 active:scale-90 cursor-pointer"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="h-4 w-4 md:h-5 md:w-5 text-white" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      scrollRight();
+                    }}
+                    className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-black/50 hover:bg-black/75 active:bg-black/90 text-white border border-white/10 backdrop-blur-sm transition-all duration-300 opacity-70 md:opacity-0 md:group-hover/carousel:opacity-100 focus:opacity-100 active:scale-90 cursor-pointer"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="h-4 w-4 md:h-5 md:w-5 text-white" />
+                  </button>
+                </>
+              )}
 
-            {/* Premium Slide Navigation / Thumbnails */}
-            {product.images && product.images.length > 1 && (
-              <div className="flex md:flex-col justify-center gap-3 mt-2.5 md:mt-0 w-full md:w-auto shrink-0">
-                {product.images.map((imgUrl, idx) => {
-                  const isSelected = activeImageIndex === idx;
-                  return (
+              {/* Pagination Dots Indicator */}
+              {product.images && product.images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 bg-black/40 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/5">
+                  {product.images.map((_, idx) => (
                     <button
                       key={idx}
                       type="button"
-                      onClick={() => setActiveImageIndex(idx)}
-                      className={`relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-24 rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer ${
-                        isSelected
-                          ? "border-brand-green ring-2 ring-brand-green/20 scale-105"
-                          : "border-white/10 opacity-60 hover:opacity-100 hover:border-white/30"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const container = scrollContainerRef.current;
+                        if (container) {
+                          const width = container.clientWidth;
+                          container.scrollTo({
+                            left: idx * width,
+                            behavior: 'smooth'
+                          });
+                        }
+                        setActiveImageIndex(idx);
+                      }}
+                      className={`w-1.5 h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                        activeImageIndex === idx
+                          ? "bg-brand-green w-4"
+                          : "bg-zinc-500 hover:bg-zinc-400"
                       }`}
-                      aria-label={`View perfume image ${idx + 1}`}
-                    >
-                      <img
-                        src={imgUrl}
-                        alt={`${product.name} slide ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-            )}
+                      aria-label={`Go to slide ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
           </div>
 
           {/* RIGHT COLUMN: Product Information & Interactive Controls */}
-          <div className="md:col-span-6 flex flex-col justify-center">
+          <div className="md:col-span-6 flex flex-col justify-start">
             {/* Brand Title */}
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.45em] text-brand-green leading-none">
               JUNAID PERFUMES

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useMemo, useEffect, type ReactNode } from "react";
 
 export type CartItem = {
   id: string;
@@ -20,7 +20,7 @@ type CartContextValue = {
   setCheckoutOpen: (v: boolean) => void;
   openCheckout: () => void;
   buyNow: (item: Omit<CartItem, "qty">) => void;
-  addItem: (item: Omit<CartItem, "qty">) => void;
+  addItem: (item: Omit<CartItem, "qty">, openDrawer?: boolean) => void;
   removeItem: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
   clear: () => void;
@@ -31,11 +31,27 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<CartItem[]>(() => {
+    try {
+      const saved = localStorage.getItem("junaid_cart_items");
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      console.error("Failed to load cart items:", e);
+      return [];
+    }
+  });
   const [isOpen, setOpen] = useState(false);
   const [isCheckoutOpen, setCheckoutOpen] = useState(false);
 
-  const addItem = useCallback((item: Omit<CartItem, "qty">) => {
+  useEffect(() => {
+    try {
+      localStorage.setItem("junaid_cart_items", JSON.stringify(items));
+    } catch (e) {
+      console.error("Failed to save cart items:", e);
+    }
+  }, [items]);
+
+  const addItem = useCallback((item: Omit<CartItem, "qty">, openDrawer = true) => {
     setItems((prev) => {
       const found = prev.find((p) => p.id === item.id);
       if (found) {
@@ -43,7 +59,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { ...item, qty: 1 }];
     });
-    setOpen(true);
+    if (openDrawer) {
+      setOpen(true);
+    }
   }, []);
 
   const removeItem = useCallback((id: string) => {
