@@ -180,7 +180,7 @@ function ProductCard({
       <div className="flex flex-col gap-1.5 px-2.5 py-3 pb-3.5 sm:pb-4">
         {/* Card details container (translates up slightly on hover/touch to add space above the absolute button) */}
         <div className={`flex flex-col gap-1 w-full transition-transform duration-300 ease-out ${
-          isTouched ? "-translate-y-[26px] sm:-translate-y-[32px]" : "md:group-hover:-translate-y-[26px] md:group-hover:sm:-translate-y-[32px]"
+          isTouched ? "-translate-y-2.5 sm:-translate-y-3" : "md:group-hover:-translate-y-2.5 md:group-hover:sm:-translate-y-3"
         }`}>
           <div className="flex justify-between items-start gap-2">
             <button type="button" onClick={goToProduct} className="text-left cursor-pointer min-w-0 flex-1">
