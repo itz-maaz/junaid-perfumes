@@ -180,7 +180,7 @@ function ProductCard({
       <div className="flex flex-col gap-1.5 px-2.5 py-3 pb-3.5 sm:pb-4">
         {/* Card details container (translates up slightly on hover/touch to add space above the absolute button) */}
         <div className={`flex flex-col gap-1 w-full transition-transform duration-300 ease-out ${
-          isTouched ? "-translate-y-2 sm:-translate-y-2.5" : "md:group-hover:-translate-y-2 md:group-hover:sm:-translate-y-2.5"
+          isTouched ? "-translate-y-[26px] sm:-translate-y-[32px]" : "md:group-hover:-translate-y-[26px] md:group-hover:sm:-translate-y-[32px]"
         }`}>
           <div className="flex justify-between items-start gap-2">
             <button type="button" onClick={goToProduct} className="text-left cursor-pointer min-w-0 flex-1">
@@ -200,10 +200,10 @@ function ProductCard({
             </p>
             <div className={`flex flex-nowrap items-center gap-x-1 shrink-0 overflow-hidden transition-all duration-300 ease-out ${
               isTouched 
-                ? "max-w-[150px] opacity-100" 
+                ? "max-w-[80px] sm:max-w-[150px] opacity-100" 
                 : "max-w-0 opacity-0 md:group-hover:max-w-[150px] md:group-hover:opacity-100"
             }`}>
-              {product.highlights.slice(0, 2).map((h, i) => (
+              {product.highlights.slice(0, 1).map((h, i) => (
                 <span
                   key={i}
                   className="inline-flex items-center text-[7px] xs:text-[7.5px] sm:text-[8px] font-semibold uppercase tracking-[0.08em] text-zinc-300 bg-white/5 border border-white/10 rounded px-1.5 py-0.5 whitespace-nowrap"
