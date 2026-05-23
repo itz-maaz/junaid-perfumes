@@ -178,10 +178,8 @@ function ProductCard({
       </div>
 
       <div className="flex flex-col gap-1.5 px-2.5 py-3 pb-3.5 sm:pb-4">
-        {/* Translating Wrapper to shift entire text block upwards on hover/touch */}
-        <div className={`flex flex-col gap-1 transition-transform duration-300 ease-out ${
-          isTouched ? "-translate-y-6 sm:-translate-y-7" : "md:group-hover:-translate-y-6 md:group-hover:sm:-translate-y-7"
-        }`}>
+        {/* Card details container */}
+        <div className="flex flex-col gap-1 w-full">
           <div className="flex justify-between items-start gap-2">
             <button type="button" onClick={goToProduct} className="text-left cursor-pointer min-w-0 flex-1">
               <h3 className="font-serif text-sm sm:text-base leading-tight text-white truncate hover:text-brand-green transition-colors">
@@ -193,12 +191,16 @@ function ProductCard({
             </span>
           </div>
 
-          {/* Row 2: Smell notes on the left, highlight badges on the right */}
+          {/* Row 2: Smell notes on the left, highlight badges (beside notes on hover) on the right */}
           <div className="flex justify-between items-center gap-2 mt-0.5 min-w-0 w-full">
             <p className="text-[10px] sm:text-xs text-zinc-400 truncate leading-snug min-w-0 flex-1">
               {product.notes}
             </p>
-            <div className="flex flex-nowrap items-center gap-x-1 shrink-0">
+            <div className={`flex flex-nowrap items-center gap-x-1 shrink-0 overflow-hidden transition-all duration-300 ease-out ${
+              isTouched 
+                ? "max-w-[150px] opacity-100" 
+                : "max-w-0 opacity-0 md:group-hover:max-w-[150px] md:group-hover:opacity-100"
+            }`}>
               {product.highlights.slice(0, 2).map((h, i) => (
                 <span
                   key={i}
@@ -208,6 +210,22 @@ function ProductCard({
                 </span>
               ))}
             </div>
+          </div>
+
+          {/* Row 3: Highlights below notes (visible by default, fades out/collapses on hover) */}
+          <div className={`flex flex-nowrap items-center gap-x-1.5 overflow-hidden w-full mt-0.5 transition-all duration-300 ease-out ${
+            isTouched
+              ? "max-w-0 opacity-0 pointer-events-none"
+              : "max-w-[200px] opacity-100 md:group-hover:max-w-0 md:group-hover:opacity-0 md:group-hover:pointer-events-none"
+          }`}>
+            {product.highlights.slice(0, 2).map((h, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center text-[7px] xs:text-[7.5px] sm:text-[8px] font-semibold uppercase tracking-[0.08em] text-zinc-300 bg-white/5 border border-white/10 rounded px-1.5 py-0.5 whitespace-nowrap"
+              >
+                {h}
+              </span>
+            ))}
           </div>
         </div>
 
